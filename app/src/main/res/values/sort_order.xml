@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string-array name="SortOrder">
+        <item>Most Popular</item>
+        <item>Top Rated</item>
+    </string-array>
+    <string-array name="SortOrderValue">
+        <item>popularity.desc</item>
+        <item>vote_average.desc</item>
+    </string-array>
+
+</resources>

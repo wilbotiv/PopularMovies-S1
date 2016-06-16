@@ -113,7 +113,7 @@ public class MovieContentProvider extends ContentProvider {
             case MOVIE: {
 //                normalizeDate(values);
                 long _id = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
+                if (_id > 0)
                     returnUri = MovieContract.MovieEntry.buildMovieUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
@@ -141,7 +141,7 @@ public class MovieContentProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
         // this makes delete all rows return the number of rows deleted
-        if ( null == selection ) selection = "1";
+        if (null == selection) selection = "1";
         switch (match) {
             case MOVIE:
                 rowsDeleted = db.delete(
@@ -210,5 +210,6 @@ public class MovieContentProvider extends ContentProvider {
                 return returnCount;
             default:
                 return super.bulkInsert(uri, values);
+        }
     }
 }

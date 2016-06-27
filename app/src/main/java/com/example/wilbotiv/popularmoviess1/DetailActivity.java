@@ -57,7 +57,7 @@ public class DetailActivity extends ActionBarActivity {
         public PlaceholderFragment() {
         }
 
-        @Override
+        /*@Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
@@ -77,6 +77,6 @@ public class DetailActivity extends ActionBarActivity {
 
             Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + movie.getPosterPath()).into(imageView);
             return rootView;
-        }
+        }*/
     }
 }

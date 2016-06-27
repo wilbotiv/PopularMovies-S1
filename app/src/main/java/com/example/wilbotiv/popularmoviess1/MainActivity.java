@@ -10,6 +10,7 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 
     private final static String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "The onCreate() method has been called");
@@ -22,35 +23,6 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "The onStart() method has been called");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "The onResume() method has been called");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "The onPause() method has been called");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "The onStop() method has been called");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "The onDestroy() method has been called");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

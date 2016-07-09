@@ -3,13 +3,15 @@ package com.example.wilbotiv.popularmoviess1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
-
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
@@ -17,6 +19,36 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new MoviesFragment())
                     .commit();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v(LOG_TAG, "onPause() called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(LOG_TAG, "onResume() called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v(LOG_TAG, "onStop() called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v(LOG_TAG, "onDestroy() called");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v(LOG_TAG, "onStart() called");
     }
 
     @Override

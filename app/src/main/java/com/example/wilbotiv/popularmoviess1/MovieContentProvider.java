@@ -15,8 +15,8 @@ public class MovieContentProvider extends ContentProvider {
     private MovieDbHelper mOpenHelper;
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    static final int MOVIE_POPULAR = 100;
-    static final int MOVIE_TOPRATED = 200;
+    static final int MOVIE = 100;
+    static final int FAVORITE = 200;
 
     static UriMatcher buildUriMatcher() {
         // I know what you're thinking.  Why create a UriMatcher when you can use regular
@@ -30,11 +30,7 @@ public class MovieContentProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, MovieContract.PATH_MOVIE, MOVIE);
-        /*matcher.addURI(authority, MovieContract.PATH_MOVIE + "*//*", WEATHER_WITH_LOCATION);
-        matcher.addURI(authority, MovieContract.PATH_MOVIE + "*//*//*#", WEATHER_WITH_LOCATION_AND_DATE);
-
-        matcher.addURI(authority, MovieContract.PATH_LOCATION, LOCATION);
-        */
+        matcher.addURI(authority, MovieContract.PATH_FAVORITE, FAVORITE);
         return matcher;
     }
 
@@ -64,10 +60,10 @@ public class MovieContentProvider extends ContentProvider {
                 );
                 break;
             }
-            /*// "location"
-            case LOCATION: {
+            // "favorite"
+            case FAVORITE: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        WeatherContract.LocationEntry.TABLE_NAME,
+                        MovieContract.FavoriteEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -77,7 +73,6 @@ public class MovieContentProvider extends ContentProvider {
                 );
                 break;
             }
-*/
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -94,8 +89,8 @@ public class MovieContentProvider extends ContentProvider {
         switch (match) {
             case MOVIE:
                 return MovieContract.MovieEntry.CONTENT_TYPE;
-            /*case LOCATION:
-                return WeatherContract.LocationEntry.CONTENT_TYPE;*/
+            case FAVORITE:
+                return MovieContract.FavoriteEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -120,14 +115,14 @@ public class MovieContentProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
-            /*case LOCATION: {
-                long _id = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, values);
+            case FAVORITE: {
+                long _id = db.insert(MovieContract.FavoriteEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
-                    returnUri = WeatherContract.LocationEntry.buildLocationUri(_id);
+                    returnUri = MovieContract.FavoriteEntry.buildFavoriteUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
-            }*/
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -148,10 +143,10 @@ public class MovieContentProvider extends ContentProvider {
                 rowsDeleted = db.delete(
                         MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            /*case LOCATION:
+            case FAVORITE:
                 rowsDeleted = db.delete(
-                        WeatherContract.LocationEntry.TABLE_NAME, selection, selectionArgs);
-                break;*/
+                        MovieContract.FavoriteEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -174,10 +169,10 @@ public class MovieContentProvider extends ContentProvider {
                 rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
-            /*case LOCATION:
-                rowsUpdated = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selection,
+            case FAVORITE:
+                rowsUpdated = db.update(MovieContract.FavoriteEntry.TABLE_NAME, values, selection,
                         selectionArgs);
-                break;*/
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

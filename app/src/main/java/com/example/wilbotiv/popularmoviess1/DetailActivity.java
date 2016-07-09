@@ -62,7 +62,7 @@ public class DetailActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-            Intent intent = getActivity().getIntent();
+            /*Intent intent = getActivity().getIntent();
             Movie movie = intent.getParcelableExtra(MoviesFragment.PAR_KEY);
             TextView textViewOriginalTitle = (TextView) rootView.findViewById(R.id.fragment_detail_textView_originalTitle);
             ImageView imageView = (ImageView) rootView.findViewById(R.id.fragment_detail_imageView_poster);
@@ -76,7 +76,7 @@ public class DetailActivity extends ActionBarActivity {
             textViewOverview.setText(movie.getOverview());
 
             Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + movie.getPosterPath()).into(imageView);
-            return rootView;
+            */return rootView;
         }
     }
 }

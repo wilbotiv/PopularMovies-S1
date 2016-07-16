@@ -10,5 +10,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_prefs_general">Sort Order</string>
     <string name="key_prefs_general">sort_order</string>
+    <string name="action_share">Share</string>
+
 
 </resources>

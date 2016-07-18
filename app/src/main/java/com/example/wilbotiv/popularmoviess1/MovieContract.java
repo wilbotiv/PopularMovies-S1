@@ -26,7 +26,7 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "movieTable";
 
-//        public static final String COLUMN_POSTERPATH = "moviePosterPath";
+        public static final String COLUMN_POSTERPATH = "moviePosterPath";
 //        public static final String COLUMN_OVERVIEW = "movieOverview";
 //        public static final String COLUMN_RELEASEDATE = "movieReleaseDate";
         public static final String COLUMN_ORIGINALTITLE = "movieOriginalTitle";

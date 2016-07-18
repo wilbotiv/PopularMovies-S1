@@ -32,9 +32,17 @@ public class MoviesAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView tv = (TextView)view.findViewById(R.id.grid_item_original_title);
-        int originalTitle = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINALTITLE);
-        tv.setText(cursor.getString(originalTitle));
+//        TextView tvoriginalTitle = (TextView)view.findViewById(R.id.grid_item_original_title);
+        ImageView IVposterPath = (ImageView) view.findViewById(R.id.grid_item_movie_image);
+
+//        int originalTitle = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINALTITLE);
+        int posterPath = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTERPATH);
+        String path = cursor.getString(posterPath);
+
+        Picasso.with(context).load("http://image.tmdb.org/t/p/w600" + path).into(IVposterPath);
+
+//        tvoriginalTitle.setText(cursor.getString(originalTitle));
+//        tvposterPath.setText(cursor.getString(posterPath));
 //        tv.setText("Test");
     }
 }

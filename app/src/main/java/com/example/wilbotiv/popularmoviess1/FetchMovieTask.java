@@ -91,7 +91,7 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                 movieValues.put(MovieContract.MovieEntry.COLUMN_ORIGINALTITLE, originalTitle);
 //                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieID);
 //                movieValues.put(MovieContract.MovieEntry.COLUMN_VOTEAVERAGE, voteAverage);
-//                movieValues.put(MovieContract.MovieEntry.COLUMN_SORT_ORDER, sortOrder);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_SORT_ORDER, sortOrder);
 
                 cVVector.add(movieValues);
             }

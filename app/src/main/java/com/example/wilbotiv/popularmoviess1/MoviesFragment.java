@@ -1,5 +1,7 @@
 package com.example.wilbotiv.popularmoviess1;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -97,10 +99,13 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+//stopped here working on getting shared pref for sort oreder
+//        sharedPreferences.
         switch (id) {
             case MOVIE_LOADER:
                 Uri movie = MovieContract.MovieEntry.CONTENT_URI;
-                return new CursorLoader(getActivity(), movie, null, null, null, null);
+                return new CursorLoader(getActivity(), movie, null, null, null, MovieContract.MovieEntry.COLUMN_SORT_ORDER + " ASC");
 // Put your sort order here in the last param based on getpref variable
         }
 

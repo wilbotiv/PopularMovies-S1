@@ -27,6 +27,8 @@ import java.util.Vector;
 /**
  * Created by wilbotiv on 7/5/2016.
  */
+
+//TODO: Drop table before fetch? I think not instead do this I used ContentResolver.delete() to delete the records in table. I had a ContentProvider implemented so it made sense to use this.
 public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
     private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
 

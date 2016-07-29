@@ -1,28 +1,41 @@
 package com.example.wilbotiv.popularmoviess1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     private MoviesAdapter mMoviesAdapter;
-//    public final static String PAR_KEY = "objectPass.par";
+
+    private static final String movieColumns[] = {
+            MovieContract.MovieEntry._ID,
+            MovieContract.MovieEntry.COLUMN_POSTERPATH,
+            MovieContract.MovieEntry.COLUMN_MOVIE_ID
+    };
+
+    static final int COL_MOVIE_ID = 0;
+    static final int COL_MOVIE_POSTER_PATH = 1;
+    static final int COL_MOVIE_COL_MOVIE_ID = 2;
 
     private static final int MOVIE_LOADER = 0;
 
@@ -60,27 +73,32 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-//        Uri movie = MovieContract.MovieEntry.CONTENT_URI;
-//        Cursor cur = getActivity().getContentResolver().query(movie, null, null, null, null);
         mMoviesAdapter = new MoviesAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
         gridView.setAdapter(mMoviesAdapter);
-        /*gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemClick(AdapterView adapterView, View view, int position, long l) {
 //                String movies = mMoviesAdapter.getItem(position).posterPath;
 //                Toast.makeText(getActivity(), movies, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                int id = cursor.getInt(COL_MOVIE_ID);
+                if (cursor != null) {
+                    Intent intent = new Intent(getActivity(), DetailActivity.class).setData(MovieContract.MovieEntry.buildMovieUri(id));
+                    startActivity(intent);
+                }
+
+                /*Intent intent = new Intent(getActivity(), DetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(PAR_KEY, movies.get(position));
-                intent.putExtras(bundle);
-                startActivity(intent);
+                intent.putExtras(bundle);*/
+//                startActivity(intent);
             }
-        });*/
+        });
         return rootView;
     }
 
@@ -99,14 +117,19 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-//stopped here working on getting shared pref for sort oreder
-//        sharedPreferences.
+//TODO: Sort order code goes here? Look at this link
+//https://discussions.udacity.com/t/loader-not-displaying-the-data-on-ui/180237
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+//        int sortOrder = sharedPreferences.getInt(getString(R.string.key_prefs_general), -1);
+//        Log.v("SORT_ORDER", String.valueOf(sortOrder));
+
+
         switch (id) {
             case MOVIE_LOADER:
                 Uri movie = MovieContract.MovieEntry.CONTENT_URI;
-                return new CursorLoader(getActivity(), movie, null, null, null, MovieContract.MovieEntry.COLUMN_SORT_ORDER + " ASC");
-// Put your sort order here in the last param based on getpref variable
+                return new CursorLoader(getActivity(), movie, null, null, null, MovieContract.MovieEntry.COLUMN_SORT_ORDER + " DESC");
+
         }
 
         return null;

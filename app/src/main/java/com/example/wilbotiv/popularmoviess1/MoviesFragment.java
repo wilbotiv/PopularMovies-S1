@@ -116,13 +116,19 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().restartLoader(MOVIE_LOADER, null,this);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
 //FIXED: Sort order code goes here? Look at this link
 //https://discussions.udacity.com/t/loader-not-displaying-the-data-on-ui/180237
-//TODO: Refresh adapter after preference change
+//FIXED: Refresh adapter after preference change
 //https://discussions.udacity.com/t/change-sort-order-preference-wont-trigger-a-screen-refresh/44306/2
-//TODO: GRIDVIEW Poster scaling not right
+//FIXED: GRIDVIEW Poster scaling not right
 //FIXED: GRIDVIEW Padding not right
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String sortOrder = sharedPreferences.getString(getString(R.string.key_prefs_general), "");

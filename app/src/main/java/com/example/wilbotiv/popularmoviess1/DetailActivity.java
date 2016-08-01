@@ -130,12 +130,14 @@ public class DetailActivity extends ActionBarActivity {
             }
         }
 
-        //TODO: Share intent does not work
+        //FIXED: Share intent does not work
         private Intent createShareMovieIntent() {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
+//            shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
+           //TODO: Add Original Title here.
+            shareIntent.putExtra(Intent.EXTRA_TEXT, MOVIE_SHARE_HASHTAG);
             return shareIntent;
         }
 
@@ -175,6 +177,7 @@ public class DetailActivity extends ActionBarActivity {
             String voteAverage = data.getString(COL_VOTE_AVERAAGE);
             String overview = data.getString(COL_OVERVIEW);
 
+            mMovie = originalTitle;
 
             TextView textViewOriginalTitle = (TextView) getView().findViewById(R.id.fragment_detail_textView_originalTitle);
             ImageView imageView = (ImageView) getView().findViewById(R.id.fragment_detail_imageView_poster);
@@ -188,6 +191,10 @@ public class DetailActivity extends ActionBarActivity {
             textViewOverview.setText(overview);
 
             Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + posterPath).into(imageView);
+
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(createShareMovieIntent());
+            }
 
         }
 

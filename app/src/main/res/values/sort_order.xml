@@ -5,8 +5,8 @@
         <item>Top Rated</item>
     </string-array>
     <string-array name="SortOrderValue">
-        <item>0</item>
-        <item>1</item>
+        <item>ASC</item>
+        <item>DESC</item>
     </string-array>
 
 </resources>

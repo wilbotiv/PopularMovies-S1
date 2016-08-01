@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -117,18 +118,19 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-//TODO: Sort order code goes here? Look at this link
+//FIXED: Sort order code goes here? Look at this link
 //https://discussions.udacity.com/t/loader-not-displaying-the-data-on-ui/180237
-
+//TODO: Refresh adapter after preference change
+//https://discussions.udacity.com/t/change-sort-order-preference-wont-trigger-a-screen-refresh/44306/2
+//TODO: GRIDVIEW Poster scaling not right
+//FIXED: GRIDVIEW Padding not right
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//        int sortOrder = sharedPreferences.getInt(getString(R.string.key_prefs_general), -1);
-//        Log.v("SORT_ORDER", String.valueOf(sortOrder));
-
+        String sortOrder = sharedPreferences.getString(getString(R.string.key_prefs_general), "");
 
         switch (id) {
             case MOVIE_LOADER:
                 Uri movie = MovieContract.MovieEntry.CONTENT_URI;
-                return new CursorLoader(getActivity(), movie, null, null, null, MovieContract.MovieEntry.COLUMN_SORT_ORDER + " DESC");
+                return new CursorLoader(getActivity(), movie, null, null, null, MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
 
         }
 

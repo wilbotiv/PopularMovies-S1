@@ -2,6 +2,7 @@ package com.example.wilbotiv.popularmoviess1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +20,9 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new MoviesFragment())
                     .commit();
         }
+        //TODO: Do I need to do this?
+        PreferenceManager.setDefaultValues(this, R.xml.prefs_general, false);
+
     }
 
     @Override

@@ -6,8 +6,16 @@
            android:minHeight="?android:attr/listPreferredItemHeight"
            android:gravity="center_vertical"
            android:id="@+id/grid_item_movie_image"
-           android:scaleType="fitStart"
            android:adjustViewBounds="true"
-           android:padding="16dp"
-           android:layout_margin="16dp"
+           android:padding="0dp"
+           android:layout_margin="0dp"
     />
+
+<!--
+
+android:scaleType="fitStart"
+android:adjustViewBounds="true"
+
+
+
+           -->

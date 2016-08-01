@@ -5,6 +5,6 @@
         android:entries="@array/SortOrder"
         android:entryValues="@array/SortOrderValue"
         android:title="@string/title_prefs_general"
-        android:defaultValue="3"/>
+        android:defaultValue="ASC"/>
 </PreferenceScreen>
 <!--My defaultValue is not right-->

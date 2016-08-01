@@ -118,7 +118,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onResume() {
         super.onResume();
-        getLoaderManager().restartLoader(MOVIE_LOADER, null,this);
+        getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 
     @Override
@@ -136,7 +136,15 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         switch (id) {
             case MOVIE_LOADER:
                 Uri movie = MovieContract.MovieEntry.CONTENT_URI;
-                return new CursorLoader(getActivity(), movie, null, null, null, MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
+                return new CursorLoader(getActivity(),
+                        movie,
+                        null,
+                        null,
+                        null,
+                        MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
+
+//FIXED: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
+//                return new CursorLoader(getActivity(), movie, null, null, null, null);
 
         }
 

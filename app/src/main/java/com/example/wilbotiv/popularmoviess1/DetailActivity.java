@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
+//FIXED: DetailActivity does not scroll.....
 public class DetailActivity extends ActionBarActivity {
 
 
@@ -69,6 +69,7 @@ public class DetailActivity extends ActionBarActivity {
         private static final String LOG_TAG = DetailActivity.class.getSimpleName();
         private static final String MOVIE_SHARE_HASHTAG = " #PopularMoviesS1";
         private ShareActionProvider mShareActionProvider;
+//FIXED: mMovie needs to have originalTitle
         private String mMovie;
 
         private static final String[] MOVIE_COLUMNS = {
@@ -136,8 +137,8 @@ public class DetailActivity extends ActionBarActivity {
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             shareIntent.setType("text/plain");
 //            shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
-           //TODO: Add Original Title here.
-            shareIntent.putExtra(Intent.EXTRA_TEXT, MOVIE_SHARE_HASHTAG);
+           //FIXED: Add Original Title here.
+            shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
             return shareIntent;
         }
 

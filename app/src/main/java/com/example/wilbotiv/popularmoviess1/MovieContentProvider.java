@@ -90,7 +90,7 @@ public class MovieContentProvider extends ContentProvider {
                         selectionArgs,
                         null,
                         null,
-                        sortOrder
+                        null
                 );
                 break;
             }

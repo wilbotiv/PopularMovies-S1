@@ -40,9 +40,13 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_FAVORITE_TABLE = "CREATE TABLE " + MovieContract.FavoriteEntry.TABLE_NAME + " (" +
                 MovieContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " TEXT NOT NULL, " +
-                MovieContract.FavoriteEntry.COLUMN_ID + " TEXT NOT NULL" + " );";
-
+                MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL," +
+                MovieContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
+                MovieContract.FavoriteEntry.COLUMN_RELEASEDATE + " TEXT NOT NULL, " +
+                MovieContract.FavoriteEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                MovieContract.FavoriteEntry.COLUMN_VOTEAVERAGE + " TEXT NOT NULL, " +
+                MovieContract.FavoriteEntry.COLUMN_POSTERPATH + " TEXT NOT NULL" +
+                " );";
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_FAVORITE_TABLE);
     }

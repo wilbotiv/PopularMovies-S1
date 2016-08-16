@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-//TODO: INSTALL - Stetho guide - an Android app debug tool
+import com.facebook.stetho.Stetho;
+
+//DONE: INSTALL - Stetho guide - an Android app debug tool
 //TODO: Allow users to view and play trailers
 //TODO: read reviews of a selected movie.
 //TODO: Mark a movie as a favorite in the details view by tapping a button
@@ -23,6 +25,28 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
+//        Stetho.initializeWithDefaults(this);
+
+        // Create an InitializerBuilder
+        Stetho.InitializerBuilder initializerBuilder =
+                Stetho.newInitializerBuilder(this);
+
+// Enable Chrome DevTools
+        initializerBuilder.enableWebKitInspector(
+                Stetho.defaultInspectorModulesProvider(this)
+        );
+
+// Enable command line interface
+        initializerBuilder.enableDumpapp(
+                Stetho.defaultDumperPluginsProvider(this)
+        );
+
+// Use the InitializerBuilder to generate an Initializer
+        Stetho.Initializer initializer = initializerBuilder.build();
+
+// Initialize Stetho with the Initializer
+        Stetho.initialize(initializer);
+
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

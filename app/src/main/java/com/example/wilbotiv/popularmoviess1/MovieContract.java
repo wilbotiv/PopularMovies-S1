@@ -50,12 +50,13 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "favoriteTable";
 
-//        public static final String COLUMN_POSTERPATH = "moviePosterPath";
-//        public static final String COLUMN_OVERVIEW = "movieOverview";
-//        public static final String COLUMN_RELEASEDATE = "movieReleaseDate";
+        public static final String COLUMN_POSTERPATH = "moviePosterPath";
+        public static final String COLUMN_OVERVIEW = "movieOverview";
+        public static final String COLUMN_RELEASEDATE = "movieReleaseDate";
         public static final String COLUMN_ORIGINALTITLE = "movieOriginalTitle";
         public static final String COLUMN_ID = "movieId";
-//        public static final String COLUMN_VOTEAVERAGE = "movieVoteAverage";
+        public static final String COLUMN_VOTEAVERAGE = "movieVoteAverage";
+        public static final String COLUMN_MOVIE_ID = "movieId";
 
         // For inserting a movie in to the favorite table
         public static Uri buildFavoriteUri(long id) {

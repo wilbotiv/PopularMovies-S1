@@ -18,8 +18,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 //FIXED: DetailActivity does not scroll.....
@@ -72,12 +74,20 @@ public class DetailActivity extends ActionBarActivity {
 //FIXED: mMovie needs to have originalTitle
         private String mMovie;
 
+        String posterPath;
+        String originalTitle;
+        String releaseDate;
+        String voteAverage;
+        String overview;
+
+
         private static final String[] MOVIE_COLUMNS = {
                 MovieContract.MovieEntry._ID,
                 MovieContract.MovieEntry.COLUMN_POSTERPATH,
                 MovieContract.MovieEntry.COLUMN_ORIGINALTITLE,
                 MovieContract.MovieEntry.COLUMN_VOTEAVERAGE,
-                MovieContract.MovieEntry.COLUMN_OVERVIEW
+                MovieContract.MovieEntry.COLUMN_OVERVIEW,
+                MovieContract.MovieEntry.COLUMN_RELEASEDATE
         };
 
         private static final int _ID = 0;
@@ -85,6 +95,7 @@ public class DetailActivity extends ActionBarActivity {
         private static final int COL_ORIGINAL_TITLE = 2;
         private static final int COL_VOTE_AVERAAGE = 3;
         private static final int COL_OVERVIEW = 4;
+        private static final int COL_REALEASEDATE = 5;
 
 //        Uri detailUri;
 
@@ -96,6 +107,15 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            Button button = (Button) rootView.findViewById(R.id.fragment_detail_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Toast toast = Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT);
+                    toast.show();
+
+//Stopping here for the night.
+                }
+            });
 //            Intent intent = getActivity().getIntent();
 //            if (intent != null) {
 //                mUri = intent.getDataString();
@@ -172,9 +192,10 @@ public class DetailActivity extends ActionBarActivity {
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             Log.v(LOG_TAG, "In onLoadFinished");
             if (!data.moveToFirst()) { return; }
-
+// maybe make these member variables......
             String posterPath = data.getString(COL_POSTER_PATH);
             String originalTitle = data.getString(COL_ORIGINAL_TITLE);
+            String releaseDate = data.getString(COL_ORIGINAL_TITLE);
             String voteAverage = data.getString(COL_VOTE_AVERAAGE);
             String overview = data.getString(COL_OVERVIEW);
 

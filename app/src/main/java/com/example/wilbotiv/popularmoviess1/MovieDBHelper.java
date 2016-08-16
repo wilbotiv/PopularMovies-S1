@@ -29,7 +29,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 //                MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY, " +
                 MovieContract.MovieEntry.COLUMN_ORIGINALTITLE + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL," +
-                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
+//                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_RELEASEDATE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_VOTEAVERAGE + " TEXT NOT NULL, " +
@@ -41,7 +42,10 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_FAVORITE_TABLE = "CREATE TABLE " + MovieContract.FavoriteEntry.TABLE_NAME + " (" +
                 MovieContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL," +
-                MovieContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
+                MovieContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL , " +
+//                MovieContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL , " +
+//                MovieContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
+                //table messed up data in the wrong columns.... got to go to bed
                 MovieContract.FavoriteEntry.COLUMN_RELEASEDATE + " TEXT NOT NULL, " +
                 MovieContract.FavoriteEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
                 MovieContract.FavoriteEntry.COLUMN_VOTEAVERAGE + " TEXT NOT NULL, " +

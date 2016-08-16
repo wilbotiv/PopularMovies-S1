@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
 //FIXED: DetailActivity does not scroll.....
 public class DetailActivity extends ActionBarActivity {
 
@@ -73,31 +74,34 @@ public class DetailActivity extends ActionBarActivity {
         private static final String LOG_TAG = DetailActivity.class.getSimpleName();
         private static final String MOVIE_SHARE_HASHTAG = " #PopularMoviesS1";
         private ShareActionProvider mShareActionProvider;
-//FIXED: mMovie needs to have originalTitle
+        //FIXED: mMovie needs to have originalTitle
         private String mMovie;
 
         String posterPath;
         String originalTitle;
         String releaseDate;
-        String voteAverage;
         String overview;
+        String movieID;
+        String voteAverage;
 
 
         private static final String[] MOVIE_COLUMNS = {
-                MovieContract.MovieEntry._ID,
+//                MovieContract.MovieEntry._ID,
                 MovieContract.MovieEntry.COLUMN_POSTERPATH,
                 MovieContract.MovieEntry.COLUMN_ORIGINALTITLE,
-                MovieContract.MovieEntry.COLUMN_VOTEAVERAGE,
+                MovieContract.MovieEntry.COLUMN_RELEASEDATE,
                 MovieContract.MovieEntry.COLUMN_OVERVIEW,
-                MovieContract.MovieEntry.COLUMN_RELEASEDATE
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+                MovieContract.MovieEntry.COLUMN_VOTEAVERAGE,
         };
 
-        private static final int _ID = 0;
-        private static final int COL_POSTER_PATH = 1;
-        private static final int COL_ORIGINAL_TITLE = 2;
-        private static final int COL_VOTE_AVERAAGE = 3;
-        private static final int COL_OVERVIEW = 4;
-        private static final int COL_REALEASEDATE = 5;
+        //        private static final int _ID = 0;
+        private static final int COL_POSTER_PATH = 0;
+        private static final int COL_ORIGINAL_TITLE = 1;
+        private static final int COL_REALEASEDATE = 2;
+        private static final int COL_OVERVIEW = 3;
+        private static final int COL_MOVIE_ID = 4;
+        private static final int COL_VOTE_AVERAAGE = 5;
 
 //        Uri detailUri;
 
@@ -116,10 +120,10 @@ public class DetailActivity extends ActionBarActivity {
                     ContentValues movieValues = new ContentValues();
 
                     movieValues.put(MovieContract.FavoriteEntry.COLUMN_POSTERPATH, posterPath);
-                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_OVERVIEW, overview);
-                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_RELEASEDATE, releaseDate);
                     movieValues.put(MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE, originalTitle);
-                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_ID, 23);
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_RELEASEDATE, releaseDate);
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_OVERVIEW, overview);
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_ID, movieID);
                     movieValues.put(MovieContract.FavoriteEntry.COLUMN_VOTEAVERAGE, voteAverage);
 
                     ContentResolver resolver = getContext().getContentResolver();
@@ -172,7 +176,7 @@ public class DetailActivity extends ActionBarActivity {
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             shareIntent.setType("text/plain");
 //            shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
-           //FIXED: Add Original Title here.
+            //FIXED: Add Original Title here.
             shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
             return shareIntent;
         }
@@ -206,13 +210,17 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             Log.v(LOG_TAG, "In onLoadFinished");
-            if (!data.moveToFirst()) { return; }
+            if (!data.moveToFirst()) {
+                return;
+            }
 // maybe make these member variables......
             posterPath = data.getString(COL_POSTER_PATH);
             originalTitle = data.getString(COL_ORIGINAL_TITLE);
-            releaseDate = data.getString(COL_ORIGINAL_TITLE);
-            voteAverage = data.getString(COL_VOTE_AVERAAGE);
+            releaseDate = data.getString(COL_REALEASEDATE);
             overview = data.getString(COL_OVERVIEW);
+            movieID = data.getString(COL_MOVIE_ID);
+            voteAverage = data.getString(COL_VOTE_AVERAAGE);
+
 
             mMovie = originalTitle;
 

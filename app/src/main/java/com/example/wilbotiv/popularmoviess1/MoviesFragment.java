@@ -132,7 +132,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 //FIXED: GRIDVIEW Padding not right
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String sortOrder = sharedPreferences.getString(getString(R.string.key_prefs_general), "");
-
+//What if changed sortOrder to int then switch to one of three different loaders, branch first...
         switch (id) {
             case MOVIE_LOADER:
                 Uri movie = MovieContract.MovieEntry.CONTENT_URI;

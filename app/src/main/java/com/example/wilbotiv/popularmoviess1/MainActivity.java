@@ -13,9 +13,14 @@ import com.facebook.stetho.Stetho;
 //DONE: INSTALL - Stetho guide - an Android app debug tool
 //TODO: Allow users to view and play trailers
 //TODO: read reviews of a selected movie.
-//TODO: Mark a movie as a favorite in the details view by tapping a button
+//DONE: Mark a movie as a favorite in the details view by tapping a button
+//TODO: FavoriteActivity.
 //TODO: Modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
 //TODO: Lastly, you’ll optimize your app experience for tablet.
+//TODO: Add Release Date to Details Fragment
+//TODO: If no poster path or overview from movieDB included, then handle it...
+//TODO: movieTable keeps growing.... fetch called too often.
+//TODO: TOAST in Favorite to SAY "You added x to Favoites"....
 
 
 

@@ -1,5 +1,7 @@
 package com.example.wilbotiv.popularmoviess1;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -110,6 +112,19 @@ public class DetailActivity extends ActionBarActivity {
             Button button = (Button) rootView.findViewById(R.id.fragment_detail_button);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+
+                    ContentValues movieValues = new ContentValues();
+
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_POSTERPATH, posterPath);
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_OVERVIEW, overview);
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_RELEASEDATE, releaseDate);
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE, originalTitle);
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_ID, 23);
+                    movieValues.put(MovieContract.FavoriteEntry.COLUMN_VOTEAVERAGE, voteAverage);
+
+                    ContentResolver resolver = getContext().getContentResolver();
+                    resolver.insert(MovieContract.FavoriteEntry.CONTENT_URI, movieValues);
+
                     Toast toast = Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT);
                     toast.show();
 
@@ -193,11 +208,11 @@ public class DetailActivity extends ActionBarActivity {
             Log.v(LOG_TAG, "In onLoadFinished");
             if (!data.moveToFirst()) { return; }
 // maybe make these member variables......
-            String posterPath = data.getString(COL_POSTER_PATH);
-            String originalTitle = data.getString(COL_ORIGINAL_TITLE);
-            String releaseDate = data.getString(COL_ORIGINAL_TITLE);
-            String voteAverage = data.getString(COL_VOTE_AVERAAGE);
-            String overview = data.getString(COL_OVERVIEW);
+            posterPath = data.getString(COL_POSTER_PATH);
+            originalTitle = data.getString(COL_ORIGINAL_TITLE);
+            releaseDate = data.getString(COL_ORIGINAL_TITLE);
+            voteAverage = data.getString(COL_VOTE_AVERAAGE);
+            overview = data.getString(COL_OVERVIEW);
 
             mMovie = originalTitle;
 

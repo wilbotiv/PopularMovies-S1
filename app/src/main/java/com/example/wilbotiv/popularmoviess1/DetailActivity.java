@@ -129,7 +129,7 @@ public class DetailActivity extends ActionBarActivity {
                     ContentResolver resolver = getContext().getContentResolver();
                     resolver.insert(MovieContract.FavoriteEntry.CONTENT_URI, movieValues);
 
-                    Toast toast = Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getContext(), "'" + originalTitle + "' has been added to your Favorites", Toast.LENGTH_SHORT);
                     toast.show();
 
 //Stopping here for the night.
@@ -226,12 +226,12 @@ public class DetailActivity extends ActionBarActivity {
 
             TextView textViewOriginalTitle = (TextView) getView().findViewById(R.id.fragment_detail_textView_originalTitle);
             ImageView imageView = (ImageView) getView().findViewById(R.id.fragment_detail_imageView_poster);
-//            TextView textViewReleaseDate = (TextView) rootView.findViewById(R.id.fragment_detail_textView_releaseDate);
+            TextView textViewReleaseDate = (TextView) getView().findViewById(R.id.fragment_detail_textView_releaseDate);
             TextView textViewVoteAverage = (TextView) getView().findViewById(R.id.fragment_detail_textView_voteAverage);
             TextView textViewOverview = (TextView) getView().findViewById(R.id.fragment_detail_textView_overview);
 //
             textViewOriginalTitle.setText(originalTitle);
-//            textViewReleaseDate.setText(movie.getReleaseDate());
+            textViewReleaseDate.setText(releaseDate);
             textViewVoteAverage.setText(voteAverage);
             textViewOverview.setText(overview);
 

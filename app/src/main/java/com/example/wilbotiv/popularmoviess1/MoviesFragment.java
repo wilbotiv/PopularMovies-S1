@@ -131,35 +131,50 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 //FIXED: GRIDVIEW Poster scaling not right
 //FIXED: GRIDVIEW Padding not right
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String sortOrder = sharedPreferences.getString(getString(R.string.key_prefs_general), "");
+        String sortOrder = sharedPreferences.getString(getString(R.string.key_prefs_general), "0");
+        int sortOrderValueToInt = Integer.parseInt(sortOrder);
+        Uri movie = null;
+        String sort = null;
+        if (sortOrderValueToInt == 0) {
+            movie = MovieContract.MovieEntry.CONTENT_URI;
+            sort = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "ASC";
+        } else if (sortOrderValueToInt == 1) {
+            movie = MovieContract.MovieEntry.CONTENT_URI;
+            sort = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "DESC";
+        } else if (sortOrderValueToInt == 2) {
+            movie = MovieContract.FavoriteEntry.CONTENT_URI;
+            sort = MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " " + "ASC";
+        }
+//        Need to read pref file then if else if a URI.. Girls back from ballet need to get dinner ready....
 
 //What if changed sortOrder to int then switch to one of three different loaders, branch first...
-        switch (id) {
-            case MOVIE_LOADER:
-                Uri movie = MovieContract.FavoriteEntry.CONTENT_URI;
-//                Uri movie = MovieContract.MovieEntry.CONTENT_URI;
-                return new CursorLoader(getActivity(),
-                        movie,
-                        null,
-                        null,
-                        null,
-                        MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
+                switch (id) {
+                    case MOVIE_LOADER:
+//                Uri movie = MovieContract.FavoriteEntry.CONTENT_URI;
+//                        movie = MovieContract.MovieEntry.CONTENT_URI;
+                        return new CursorLoader(getActivity(),
+                                movie,
+                                null,
+                                null,
+                                null,
+                                sort);
+//                        MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
 
 //FIXED: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
 //                return new CursorLoader(getActivity(), movie, null, null, null, null);
 
+                }
+
+                return null;
+            }
+
+            @Override
+            public void onLoadFinished (Loader < Cursor > loader, Cursor data){
+                mMoviesAdapter.swapCursor(data);
+            }
+
+            @Override
+            public void onLoaderReset (Loader < Cursor > loader) {
+                mMoviesAdapter.swapCursor(null);
+            }
         }
-
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mMoviesAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mMoviesAdapter.swapCursor(null);
-    }
-}

@@ -14,15 +14,16 @@ import com.facebook.stetho.Stetho;
 //TODO: Allow users to view and play trailers
 //TODO: read reviews of a selected movie.
 //DONE: Mark a movie as a favorite in the details view by tapping a button
-//TODO: FavoriteActivity.
-//TODO: Modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
+//Done: FavoriteActivity.
+//Done: DetailActivity for Favorites.
+//Done: Modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
 //TODO: Lastly, you’ll optimize your app experience for tablet.
-//TODO: Add Release Date to Details Fragment
+//Done: Add Release Date to Details Fragment
 //TODO: If no poster path or overview from movieDB included, then handle it...
 //TODO: movieTable keeps growing.... fetch called too often.
-//TODO: TOAST in Favorite to SAY "You added x to Favoites"....
-
-
+//Done: TOAST in Favorite to SAY "You added x to Favoites"....
+//TODO: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
+//TODO: Top rated views are sometimes messed-up
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();

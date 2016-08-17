@@ -26,6 +26,7 @@ import android.widget.GridView;
 public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
+    private final String LOG_TAG = MoviesFragment.class.getSimpleName();
     private MoviesAdapter mMoviesAdapter;
 
     private static final String movieColumns[] = {
@@ -89,6 +90,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 int id = cursor.getInt(COL_MOVIE_ID);
                 if (cursor != null) {
+//                  TODO: setData will need to be changed here to support Favorites detail view....
                     Intent intent = new Intent(getActivity(), DetailActivity.class).setData(MovieContract.MovieEntry.buildMovieUri(id));
                     startActivity(intent);
                 }
@@ -106,6 +108,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     private void updateMovie() {
         FetchMovieTask movieTask = new FetchMovieTask(getActivity());
 //        String location = Utility.getPreferredLocation(getActivity());
+        Log.v(LOG_TAG, "updateMovie() called");
         movieTask.execute();
     }
 
@@ -135,15 +138,19 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         int sortOrderValueToInt = Integer.parseInt(sortOrder);
         Uri movie = null;
         String sort = null;
+//        TODO: change sortOrder field to 1 or 0 instead of string vote_average.desc
+        String selection = null;
         if (sortOrderValueToInt == 0) {
             movie = MovieContract.MovieEntry.CONTENT_URI;
-            sort = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "ASC";
+//            sort = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "ASC";
+            selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'popularity.desc'";
         } else if (sortOrderValueToInt == 1) {
             movie = MovieContract.MovieEntry.CONTENT_URI;
-            sort = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "DESC";
+//            sort = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "DESC";
+            selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'vote_average.desc'";
         } else if (sortOrderValueToInt == 2) {
             movie = MovieContract.FavoriteEntry.CONTENT_URI;
-            sort = MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " " + "ASC";
+//            sort = MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " " + "ASC";
         }
 //        Need to read pref file then if else if a URI.. Girls back from ballet need to get dinner ready....
 
@@ -155,9 +162,9 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                         return new CursorLoader(getActivity(),
                                 movie,
                                 null,
+                                selection,
                                 null,
-                                null,
-                                sort);
+                                null);
 //                        MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
 
 //FIXED: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....

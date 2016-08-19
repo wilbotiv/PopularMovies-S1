@@ -36,15 +36,18 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
     private void getReviewDataFromJson(String moviesJsonStr) throws JSONException {
 //    private void getReviewDataFromJson(String moviesJsonStr, String sortOrder) throws JSONException {
         final String RESULTS = "results";
-        final String POSTER_PATH = "poster_path";
-        final String OVERVIEW = "overview";
-        final String RELEASE_DATE = "release_date";
-        final String ORIGINAL_TITLE = "original_title";
-        final String ID = "id";
-        final String VOTE_AVERAGE = "vote_average";
+        final String MOVIE_ID = "id";
+        final String AUTHOR = "author";
+        final String CONTENT = "content";
+        final String COMMENT_ID = "id";
+//        final String RELEASE_DATE = "release_date";
+//        final String ORIGINAL_TITLE = "original_title";
+//        final String ID = "id";
+//        final String VOTE_AVERAGE = "vote_average";
 
         try {
             JSONObject jsonObject = new JSONObject(moviesJsonStr);
+            String id = jsonObject.getString(MOVIE_ID);
             JSONArray movieArray = jsonObject.getJSONArray(RESULTS);
 
 //        ArrayList<Movie> movieArrayList = new ArrayList<Movie>(jsonArray.length());
@@ -53,12 +56,13 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
 
             for (int i = 0; i < movieArray.length(); i++) {
 
-                String posterPath;
-                String overview;
-                String releaseDate;
-                String originalTitle;
-                String movieID;
-                String voteAverage;
+                String author;
+                String content;
+                String commentID;
+//                String releaseDate;
+//                String originalTitle;
+//                String movieID;
+//                String voteAverage;
 
 
                 JSONObject result = movieArray.getJSONObject(i);
@@ -71,21 +75,24 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
                 movie.setVoteAverage(result.getString(VOTE_AVERAGE));
                 movieArrayList.add(movie);
     */
-                posterPath = result.getString(POSTER_PATH);
-                overview = result.getString(OVERVIEW);
-                releaseDate = result.getString(RELEASE_DATE);
-                originalTitle = result.getString(ORIGINAL_TITLE);
-                movieID = result.getString(ID);
-                voteAverage = result.getString(VOTE_AVERAGE);
+                author = result.getString(AUTHOR);
+                content = result.getString(CONTENT);
+                commentID = result.getString(COMMENT_ID);
+//                releaseDate = result.getString(RELEASE_DATE);
+//                originalTitle = result.getString(ORIGINAL_TITLE);
+//                movieID = result.getString(ID);
+//                voteAverage = result.getString(VOTE_AVERAGE);
 
                 ContentValues movieValues = new ContentValues();
 
-                movieValues.put(MovieContract.MovieEntry.COLUMN_POSTERPATH, posterPath);
-                movieValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, overview);
-                movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASEDATE, releaseDate);
-                movieValues.put(MovieContract.MovieEntry.COLUMN_ORIGINALTITLE, originalTitle);
-                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieID);
-                movieValues.put(MovieContract.MovieEntry.COLUMN_VOTEAVERAGE, voteAverage);
+                movieValues.put(MovieContract.ReviewEntry.COLUMN_AUTHOR, author);
+                movieValues.put(MovieContract.ReviewEntry.COLUMN_CONTENT, content);
+                movieValues.put(MovieContract.ReviewEntry.COLUMN_MOVIE_ID, id);
+                movieValues.put(MovieContract.ReviewEntry.COLUMN_COMMENT_ID, commentID);
+//                movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASEDATE, releaseDate);
+//                movieValues.put(MovieContract.MovieEntry.COLUMN_ORIGINALTITLE, originalTitle);
+//                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieID);
+//                movieValues.put(MovieContract.MovieEntry.COLUMN_VOTEAVERAGE, voteAverage);
 //                movieValues.put(MovieContract.MovieEntry.COLUMN_SORT_ORDER, sortOrder);
 
                 cVVector.add(movieValues);
@@ -104,7 +111,8 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
             if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
-                inserted = mContext.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
+//              TODO: Fix this.
+                inserted = mContext.getContentResolver().bulkInsert(MovieContract.ReviewEntry.CONTENT_URI, cvArray);
             }
 
             // Sort order:  Ascending, by date.

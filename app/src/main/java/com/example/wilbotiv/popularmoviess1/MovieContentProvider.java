@@ -18,6 +18,7 @@ public class MovieContentProvider extends ContentProvider {
     static final int MOVIE = 100;
     static final int MOVIE_DETAIL = 101;
     static final int FAVORITE = 200;
+    static final int REVIEW = 300;
 
     static UriMatcher buildUriMatcher() {
         // I know what you're thinking.  Why create a UriMatcher when you can use regular
@@ -33,6 +34,7 @@ public class MovieContentProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_MOVIE, MOVIE);
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/*", MOVIE_DETAIL);
         matcher.addURI(authority, MovieContract.PATH_FAVORITE, FAVORITE);
+        matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW);
         return matcher;
     }
 
@@ -207,10 +209,12 @@ public class MovieContentProvider extends ContentProvider {
     public int bulkInsert(Uri uri, ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
+        int returnCount;
         switch (match) {
+
             case MOVIE:
                 db.beginTransaction();
-                int returnCount = 0;
+                returnCount = 0;
                 try {
                     for (ContentValues value : values) {
 //                        normalizeDate(value);
@@ -225,6 +229,25 @@ public class MovieContentProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
+
+            case REVIEW:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+//                        normalizeDate(value);
+                        long _id = db.insert(MovieContract.ReviewEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+
             default:
                 return super.bulkInsert(uri, values);
         }

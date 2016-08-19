@@ -53,7 +53,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.ReviewEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
                 MovieContract.ReviewEntry.COLUMN_AUTHOR + " TEXT NOT NULL, " +
-                MovieContract.ReviewEntry.COLUMN_CONTENT + " TEXT NOT NULL " +
+                MovieContract.ReviewEntry.COLUMN_CONTENT + " TEXT NOT NULL, " +
+                MovieContract.ReviewEntry.COLUMN_COMMENT_ID + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL " +
                 ");";
 
 //        TODO:I think that these are not working if already exist.

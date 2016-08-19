@@ -14,7 +14,7 @@ public class MovieContract {
 
     public static final String PATH_MOVIE = "movie";
     public static final String PATH_FAVORITE = "favorite";
-    public static final String PATH_REVIEWS = "movie";
+    public static final String PATH_REVIEWS = "review";
 
     public static final class MovieEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
@@ -78,6 +78,7 @@ public class MovieContract {
         public static final String COLUMN_MOVIE_ID = "movieID";
         public static final String COLUMN_AUTHOR = "author";
         public static final String COLUMN_CONTENT = "content";
+        public static final String COLUMN_COMMENT_ID = "comment_id";
 
         // For inserting a movie in to the favorite table
         public static Uri buildReviewUri(long id) {

@@ -112,6 +112,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 //        String location = Utility.getPreferredLocation(getActivity());
         Log.v(LOG_TAG, "updateMovie() called");
         movieTask.execute();
+//      TODO: Start here this AsyncTask is working
         reviewTask.execute("140607");
     }
 

@@ -111,7 +111,7 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
             if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
-//              TODO: Fix this.
+//              Done: Fix this.
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.ReviewEntry.CONTENT_URI, cvArray);
             }
 

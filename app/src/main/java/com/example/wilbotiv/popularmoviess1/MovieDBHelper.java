@@ -22,15 +22,14 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-
+//TODO: When onCreate is called and database already exists why does it not crash...
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieContract.MovieEntry.TABLE_NAME + " (" +
                 MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY, " +
                 MovieContract.MovieEntry.COLUMN_ORIGINALTITLE + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL," +
                 MovieContract.MovieEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
-//                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_RELEASEDATE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_VOTEAVERAGE + " TEXT NOT NULL, " +
@@ -43,16 +42,24 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL," +
                 MovieContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL , " +
-//                MovieContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL , " +
-//                MovieContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT UNIQUE NOT NULL, " +
                 //table messed up data in the wrong columns.... got to go to bed
                 MovieContract.FavoriteEntry.COLUMN_RELEASEDATE + " TEXT NOT NULL, " +
                 MovieContract.FavoriteEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
                 MovieContract.FavoriteEntry.COLUMN_VOTEAVERAGE + " TEXT NOT NULL, " +
                 MovieContract.FavoriteEntry.COLUMN_POSTERPATH + " TEXT NOT NULL" +
                 " );";
+
+        final String SQL_CREATE_REVIEW_TABLE = "CREATE TABLE " + MovieContract.ReviewEntry.TABLE_NAME + " (" +
+                MovieContract.ReviewEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
+                MovieContract.ReviewEntry.COLUMN_AUTHOR + " TEXT NOT NULL, " +
+                MovieContract.ReviewEntry.COLUMN_CONTENT + " TEXT NOT NULL " +
+                ");";
+
+//        TODO:I think that these are not working if already exist.
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_FAVORITE_TABLE);
+        db.execSQL(SQL_CREATE_REVIEW_TABLE);
     }
 }
 

@@ -1,16 +1,10 @@
 package com.example.wilbotiv.popularmoviess1;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +16,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -30,20 +23,18 @@ import java.util.Vector;
  */
 
 
-public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
-    private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
+public class FetchReviewTask extends AsyncTask<String, Void, Void> {
+    private final String LOG_TAG = FetchReviewTask.class.getSimpleName();
 
     private final Context mContext;
 
-    public FetchMovieTask(Context context) {
+    public FetchReviewTask(Context context) {
         mContext = context;
     }
 
-    // The addLocation method in Sunshine may be worth looking in to as a guide for implementing Favorites
-// Done - Stopping here for the night. Tomorrow continue comparing PM to Sunshine fetch tasks.
-//    Done - Stopping here because Isabelle is about to finish Piano Lesson. Next modify table to include sort column.
 
-    private void getMovieDataFromJson(String moviesJsonStr, String sortOrder) throws JSONException {
+    private void getReviewDataFromJson(String moviesJsonStr) throws JSONException {
+//    private void getReviewDataFromJson(String moviesJsonStr, String sortOrder) throws JSONException {
         final String RESULTS = "results";
         final String POSTER_PATH = "poster_path";
         final String OVERVIEW = "overview";
@@ -95,7 +86,7 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                 movieValues.put(MovieContract.MovieEntry.COLUMN_ORIGINALTITLE, originalTitle);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieID);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_VOTEAVERAGE, voteAverage);
-                movieValues.put(MovieContract.MovieEntry.COLUMN_SORT_ORDER, sortOrder);
+//                movieValues.put(MovieContract.MovieEntry.COLUMN_SORT_ORDER, sortOrder);
 
                 cVVector.add(movieValues);
             }
@@ -160,7 +151,7 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackground(String... movieID) {
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -168,24 +159,18 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String moviesJsonStr = null;
-        String sortOrder;
+        String reviewsJsonStr = null;
+//        String sortOrder;
 
-        for (int i = 0; i < 2; i++) {
-            if (i == 0) {
-                sortOrder = "popularity.desc";
-                //                Log.v("SORT_ORDER", sortOrder);
-
-            } else {
-                sortOrder = "vote_average.desc";
-            }
             try {
-                final String BASE_URL = "http://api.themoviedb.org/3/discover/movie";
+                final String BASE_URL = "http://api.themoviedb.org/3/movie";
                 final String API_KEY = "api_key";
-                final String SORT_ORDER = "sort_by";
+//                final String SORT_ORDER = "sort_by";
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                        .appendQueryParameter(SORT_ORDER, sortOrder)
+//                        .appendQueryParameter(SORT_ORDER, sortOrder)
+                        .appendPath(movieID[0])
+                        .appendPath("reviews")
                         .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
                 Log.v(LOG_TAG, builtUri.toString());
@@ -215,9 +200,10 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                     // Stream was empty.  No point in parsing.
                     return null;
                 }
-                moviesJsonStr = buffer.toString();
-                Log.v(LOG_TAG, moviesJsonStr);
-                getMovieDataFromJson(moviesJsonStr, sortOrder);
+                reviewsJsonStr = buffer.toString();
+                Log.v(LOG_TAG, reviewsJsonStr);
+                getReviewDataFromJson(reviewsJsonStr);
+//                getReviewDataFromJson(reviewsJsonStr, sortOrder);
             } catch (IOException e) {
                 Log.e("MoviesFragment", "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
@@ -238,7 +224,7 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                     }
                 }
             }
-        }
+
         return null;
     }
 }

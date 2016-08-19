@@ -63,5 +63,26 @@ public class MovieContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
+
+    //add Favorite table with two columns and update MovieDBHelper
+    public static final class ReviewEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_REVIEWS).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEWS;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEWS;
+
+        public static final String TABLE_NAME = "reviewTable";
+
+        public static final String COLUMN_MOVIE_ID = "movieID";
+        public static final String COLUMN_AUTHOR = "author";
+        public static final String COLUMN_CONTENT = "content";
+
+        // For inserting a movie in to the favorite table
+        public static Uri buildReviewUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
 }
 

@@ -66,6 +66,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
+//            TODO: Do I really need to fetch...
             updateMovie();
             return true;
         }
@@ -115,6 +116,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onStart() {
         super.onStart();
+//        TODO: Check Sunshine, when does it fetch...
         updateMovie();
     }
 

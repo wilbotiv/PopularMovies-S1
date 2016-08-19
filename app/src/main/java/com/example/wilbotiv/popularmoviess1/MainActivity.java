@@ -25,6 +25,8 @@ import com.facebook.stetho.Stetho;
 //TODO: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
 //TODO: Top rated views are sometimes messed-up
 //TODO: Change movie URI so that we use WHERE instead of sort order
+//TODO: Reviews table, create it
+//TODO: Create new Asynctask for review. Fetch and JSON Parsing
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();

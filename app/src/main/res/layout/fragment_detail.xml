@@ -60,10 +60,19 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <TextView
-            android:id="@+id/fragment_detail_textView_overview"
+            android:id="@+id/fragment_detail_textView_movieID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/fragment_detail_textView_voteAverage"
+            android:layout_centerHorizontal="true"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <TextView
+            android:id="@+id/fragment_detail_textView_overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fragment_detail_textView_movieID"
             android:layout_centerHorizontal="true"
             android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium"/>

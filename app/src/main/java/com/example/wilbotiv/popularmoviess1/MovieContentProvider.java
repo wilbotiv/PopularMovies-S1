@@ -19,6 +19,7 @@ public class MovieContentProvider extends ContentProvider {
     static final int MOVIE_DETAIL = 101;
     static final int FAVORITE = 200;
     static final int REVIEW = 300;
+    static final int REVIEW_DETAIL = 301;
 
     static UriMatcher buildUriMatcher() {
         // I know what you're thinking.  Why create a UriMatcher when you can use regular
@@ -35,6 +36,8 @@ public class MovieContentProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/*", MOVIE_DETAIL);
         matcher.addURI(authority, MovieContract.PATH_FAVORITE, FAVORITE);
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW);
+        matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW_DETAIL);
+//        matcher.addURI(authority, MovieContract.PATH_REVIEWS + "/#", REVIEW_DETAIL);
         return matcher;
     }
 
@@ -96,6 +99,20 @@ public class MovieContentProvider extends ContentProvider {
                 );
                 break;
             }
+
+            case REVIEW_DETAIL: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.ReviewEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null
+                );
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -230,7 +247,7 @@ public class MovieContentProvider extends ContentProvider {
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
 
-            case REVIEW:
+            case REVIEW_DETAIL:
                 db.beginTransaction();
                 returnCount = 0;
                 try {

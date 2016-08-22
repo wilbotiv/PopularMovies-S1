@@ -134,7 +134,7 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                 } while (cur.moveToNext());
             }
 */
-            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + inserted + " Inserted");
+            Log.d(LOG_TAG, "FetchMovieTask Complete. " + inserted + " Inserted");
 
 //            String[] resultStrs = convertContentValuesToUXFormat(cVVector);
 //            return null;

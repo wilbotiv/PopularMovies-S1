@@ -34,23 +34,17 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
 
 
     private void getReviewDataFromJson(String moviesJsonStr) throws JSONException {
-//    private void getReviewDataFromJson(String moviesJsonStr, String sortOrder) throws JSONException {
+
         final String RESULTS = "results";
         final String MOVIE_ID = "id";
         final String AUTHOR = "author";
         final String CONTENT = "content";
         final String COMMENT_ID = "id";
-//        final String RELEASE_DATE = "release_date";
-//        final String ORIGINAL_TITLE = "original_title";
-//        final String ID = "id";
-//        final String VOTE_AVERAGE = "vote_average";
 
         try {
             JSONObject jsonObject = new JSONObject(moviesJsonStr);
             String id = jsonObject.getString(MOVIE_ID);
             JSONArray movieArray = jsonObject.getJSONArray(RESULTS);
-
-//        ArrayList<Movie> movieArrayList = new ArrayList<Movie>(jsonArray.length());
 
             Vector<ContentValues> cVVector = new Vector<ContentValues>(movieArray.length());
 
@@ -59,29 +53,12 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
                 String author;
                 String content;
                 String commentID;
-//                String releaseDate;
-//                String originalTitle;
-//                String movieID;
-//                String voteAverage;
-
 
                 JSONObject result = movieArray.getJSONObject(i);
-                /*Movie movie = new Movie();
-                movie.setPosterPath(result.getString(POSTER_PATH));
-                movie.setOverview(result.getString(OVERVIEW));
-                movie.setReleaseDate(result.getString(RELEASE_DATE));
-                movie.setOriginalTitle(result.getString(ORIGINAL_TITLE));
-                movie.setId(result.getString(ID));
-                movie.setVoteAverage(result.getString(VOTE_AVERAGE));
-                movieArrayList.add(movie);
-    */
+
                 author = result.getString(AUTHOR);
                 content = result.getString(CONTENT);
                 commentID = result.getString(COMMENT_ID);
-//                releaseDate = result.getString(RELEASE_DATE);
-//                originalTitle = result.getString(ORIGINAL_TITLE);
-//                movieID = result.getString(ID);
-//                voteAverage = result.getString(VOTE_AVERAGE);
 
                 ContentValues movieValues = new ContentValues();
 
@@ -89,15 +66,9 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
                 movieValues.put(MovieContract.ReviewEntry.COLUMN_CONTENT, content);
                 movieValues.put(MovieContract.ReviewEntry.COLUMN_MOVIE_ID, id);
                 movieValues.put(MovieContract.ReviewEntry.COLUMN_COMMENT_ID, commentID);
-//                movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASEDATE, releaseDate);
-//                movieValues.put(MovieContract.MovieEntry.COLUMN_ORIGINALTITLE, originalTitle);
-//                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieID);
-//                movieValues.put(MovieContract.MovieEntry.COLUMN_VOTEAVERAGE, voteAverage);
-//                movieValues.put(MovieContract.MovieEntry.COLUMN_SORT_ORDER, sortOrder);
 
                 cVVector.add(movieValues);
             }
-
 
             int inserted = 0;
 
@@ -115,47 +86,12 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.ReviewEntry.CONTENT_URI, cvArray);
             }
 
-            // Sort order:  Ascending, by date.
-//            String sortOrder = WeatherEntry.COLUMN_DATE + " ASC";
-//            Uri weatherForLocationUri = WeatherEntry.buildWeatherLocationWithStartDate(
-//                    locationSetting, System.currentTimeMillis());
-
-            // Students: Uncomment the next lines to display what what you stored in the bulkInsert
-            /*Cursor cur = mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
-                    null, null, null, null);
-
-            cVVector = new Vector<ContentValues>(cur.getCount());
-            if ( cur.moveToFirst() ) {
-                do {
-                    ContentValues cv = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(cur, cv);
-                    cVVector.add(cv);
-                } while (cur.moveToNext());
-            }
-*/
-            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + inserted + " Inserted");
-
-//            String[] resultStrs = convertContentValuesToUXFormat(cVVector);
-//            return null;
-
-
+            Log.d(LOG_TAG, "FetchReviewTask Complete. " + inserted + " Inserted");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
 
-
-//        for (Movie m : movieArrayList) {
-//            Log.v(LOG_TAG, POSTER_PATH + ": " + m.getPosterPath());
-//            Log.v(LOG_TAG, OVERVIEW + ": " + m.getOverview());
-//            Log.v(LOG_TAG, RELEASE_DATE + ": " + m.getReleaseDate());
-//            Log.v(LOG_TAG, ORIGINAL_TITLE + ": " + m.getOriginalTitle());
-//            Log.v(LOG_TAG, ID + ": " + m.getId());
-//            Log.v(LOG_TAG, VOTE_AVERAGE + ": " + m.getVoteAverage());
-//        }
-//        return movieArrayList;
-//        This should return a String[]
-//        return null;
     }
 
     @Override
@@ -168,15 +104,12 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
 
         // Will contain the raw JSON response as a string.
         String reviewsJsonStr = null;
-//        String sortOrder;
 
             try {
                 final String BASE_URL = "http://api.themoviedb.org/3/movie";
                 final String API_KEY = "api_key";
-//                final String SORT_ORDER = "sort_by";
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-//                        .appendQueryParameter(SORT_ORDER, sortOrder)
                         .appendPath(movieID[0])
                         .appendPath("reviews")
                         .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY).build();
@@ -211,11 +144,8 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
                 reviewsJsonStr = buffer.toString();
                 Log.v(LOG_TAG, reviewsJsonStr);
                 getReviewDataFromJson(reviewsJsonStr);
-//                getReviewDataFromJson(reviewsJsonStr, sortOrder);
             } catch (IOException e) {
                 Log.e("MoviesFragment", "Error ", e);
-                // If the code didn't successfully get the weather data, there's no point in attemping
-                // to parse it.
                 return null;
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);

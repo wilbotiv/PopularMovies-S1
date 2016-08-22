@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,9 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 //FIXED: DetailActivity does not scroll.....
+//TODO: Add views programmatically or ListView...
+//Todo: Let's call the API Review up front
+//TODO: Multiple loaders.
 public class DetailActivity extends ActionBarActivity {
 
 
@@ -70,7 +74,8 @@ public class DetailActivity extends ActionBarActivity {
      */
     public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-        private static final int DETAIL_LOADER = 0;
+        private static final int DETAIL_LOADER_HEADER = 0;
+        private static final int DETAIL_LOADER_REVIEWS = 1;
         private static final String LOG_TAG = DetailActivity.class.getSimpleName();
         private static final String MOVIE_SHARE_HASHTAG = " #PopularMoviesS1";
         private ShareActionProvider mShareActionProvider;
@@ -131,28 +136,8 @@ public class DetailActivity extends ActionBarActivity {
 
                     Toast toast = Toast.makeText(getContext(), "'" + originalTitle + "' has been added to your Favorites", Toast.LENGTH_SHORT);
                     toast.show();
-
-//Stopping here for the night.
                 }
             });
-//            Intent intent = getActivity().getIntent();
-//            if (intent != null) {
-//                mUri = intent.getDataString();
-//                detailUri = Uri.parse(mUri);
-//            }
-//            Movie movie = intent.getParcelableExtra(MoviesFragment.PAR_KEY);
-//            TextView textViewOriginalTitle = (TextView) rootView.findViewById(R.id.fragment_detail_textView_originalTitle);
-//            ImageView imageView = (ImageView) rootView.findViewById(R.id.fragment_detail_imageView_poster);
-//            TextView textViewReleaseDate = (TextView) rootView.findViewById(R.id.fragment_detail_textView_releaseDate);
-//            TextView textViewVoteAverage = (TextView) rootView.findViewById(R.id.fragment_detail_textView_voteAverage);
-//            TextView textViewOverview = (TextView) rootView.findViewById(R.id.fragment_detail_textView_overview);
-//
-//            textViewOriginalTitle.setText(mUri);
-//            textViewReleaseDate.setText(movie.getReleaseDate());
-//            textViewVoteAverage.setText(movie.getVoteAverage());
-//            textViewOverview.setText(movie.getOverview());
-
-//            Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + movie.getPosterPath()).into(imageView);
             return rootView;
         }
 
@@ -184,7 +169,9 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+//            TODO:Init another loader here?
+            getLoaderManager().initLoader(DETAIL_LOADER_HEADER, null, this);
+//            getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
         }
 
         @Override
@@ -194,59 +181,115 @@ public class DetailActivity extends ActionBarActivity {
             if (intent == null) {
                 return null;
             }
-
+            int loaderID = id;
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
-            return new CursorLoader(
-                    getActivity(),
-                    intent.getData(),
-                    MOVIE_COLUMNS,
-                    null,
-                    null,
-                    null
-            );
+            switch (loaderID) {
+                case 0:
+                    Log.v(LOG_TAG, "In onCreateLoader case 0");
+                    return new CursorLoader(
+                            getActivity(),
+                            intent.getData(),
+                            MOVIE_COLUMNS,
+                            null,
+                            null,
+                            null
+                    );
+                case 1:
+//                    Uri uri = MovieContract.ReviewEntry.buildReviewUri(140607);
+//                    TODO: You cant use movieID, because it may be null. Get movieID from intent?
+//                    Uri uri = intent.getData();
+//                    String movieIDFromPath = uri.getLastPathSegment();
+                    Log.v(LOG_TAG, "In onCreateLoader case 1");
+                    return new CursorLoader(
+                            getActivity(),
+                            MovieContract.ReviewEntry.CONTENT_URI,
+                            null,
+                            MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " =" + movieID,
+                            null,
+                            null
+                    );
+            }
+            return null;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            Log.v(LOG_TAG, "In onLoadFinished");
+//            Log.v(LOG_TAG, "In onLoadFinished");
+
+            int loaderID = loader.getId();
+            Log.v(LOG_TAG, "In onLoadFinished " + "Loader ID is " + loaderID);
+
             if (!data.moveToFirst()) {
                 return;
             }
-// maybe make these member variables......
-            posterPath = data.getString(COL_POSTER_PATH);
-            originalTitle = data.getString(COL_ORIGINAL_TITLE);
-            releaseDate = data.getString(COL_REALEASEDATE);
-            overview = data.getString(COL_OVERVIEW);
-            movieID = data.getString(COL_MOVIE_ID);
-            voteAverage = data.getString(COL_VOTE_AVERAAGE);
+//DONE: maybe make these member variables......
 
+            switch (loaderID) {
+                case 0:
+                    Log.v(LOG_TAG, "In onLoadFinished case 0");
 
-            mMovie = originalTitle;
+                    posterPath = data.getString(COL_POSTER_PATH);
+                    originalTitle = data.getString(COL_ORIGINAL_TITLE);
+                    releaseDate = data.getString(COL_REALEASEDATE);
+                    overview = data.getString(COL_OVERVIEW);
+                    movieID = data.getString(COL_MOVIE_ID);
+                    voteAverage = data.getString(COL_VOTE_AVERAAGE);
 
-            TextView textViewOriginalTitle = (TextView) getView().findViewById(R.id.fragment_detail_textView_originalTitle);
-            ImageView imageView = (ImageView) getView().findViewById(R.id.fragment_detail_imageView_poster);
-            TextView textViewReleaseDate = (TextView) getView().findViewById(R.id.fragment_detail_textView_releaseDate);
-            TextView textViewVoteAverage = (TextView) getView().findViewById(R.id.fragment_detail_textView_voteAverage);
-            TextView textViewOverview = (TextView) getView().findViewById(R.id.fragment_detail_textView_overview);
+                    mMovie = originalTitle;
+
+                    TextView textViewOriginalTitle = (TextView) getView().findViewById(R.id.fragment_detail_textView_originalTitle);
+                    ImageView imageView = (ImageView) getView().findViewById(R.id.fragment_detail_imageView_poster);
+                    TextView textViewReleaseDate = (TextView) getView().findViewById(R.id.fragment_detail_textView_releaseDate);
+                    TextView textViewVoteAverage = (TextView) getView().findViewById(R.id.fragment_detail_textView_voteAverage);
+                    TextView textViewMovieID= (TextView) getView().findViewById(R.id.fragment_detail_textView_movieID);
+                    TextView textViewOverview = (TextView) getView().findViewById(R.id.fragment_detail_textView_overview);
 //
-            textViewOriginalTitle.setText(originalTitle);
-            textViewReleaseDate.setText(releaseDate);
-            textViewVoteAverage.setText(voteAverage);
-            textViewOverview.setText(overview);
+                    textViewOriginalTitle.setText(originalTitle);
+                    textViewReleaseDate.setText(releaseDate);
+                    textViewVoteAverage.setText(voteAverage);
+                    textViewMovieID.setText(movieID);
+                    textViewOverview.setText(overview);
 
-            Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + posterPath).into(imageView);
+                    Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + posterPath).into(imageView);
+//TODO: updateMoviewReview() causes onLoadFinished() to run multiple times.
+                    updateMovieReview();
+                    getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
+                    break;
+                case 1:
+                    Log.v(LOG_TAG, "In onLoadFinished case 1");
+//                    TODO: Create some views.
+                    String reviewerName = data.getString(2);
+                    String content = data.getString(3);
+                    Log.v(LOG_TAG, " " + reviewerName + " " + content);
 
+/*
+                    for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
+
+                    }
+*/
+                        break;
+            }
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareMovieIntent());
             }
 
+//            updateMovieReview();
+        }
+
+        private void updateMovieReview() {
+//            FetchMovieTask movieTask = new FetchMovieTask(getActivity());
+            FetchReviewTask fetchReviewTask = new FetchReviewTask(getContext());
+            Log.v(LOG_TAG, "updateMovieReview() called");
+//            movieTask.execute();
+            fetchReviewTask.execute(movieID);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
 
         }
+
 
     }
 

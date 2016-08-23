@@ -12,6 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
@@ -23,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -259,15 +262,32 @@ public class DetailActivity extends ActionBarActivity {
                 case 1:
                     Log.v(LOG_TAG, "In onLoadFinished case 1");
 //                    TODO: Create some views.
-                    String reviewerName = data.getString(2);
-                    String content = data.getString(3);
-                    Log.v(LOG_TAG, " " + reviewerName + " " + content);
+//                    TODO: Change index in cursor to FINAL variable
+//                    String reviewerName = data.getString(2);
+//                    String content = data.getString(3);
+//                    Log.v(LOG_TAG, " " + reviewerName + " " + content);
 
-/*
+//                    for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
+
+                    int count = 0;
                     for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
+                        String reviewerName = data.getString(2);
+                        String content = data.getString(3);
+                        Log.v(LOG_TAG, " " + reviewerName + " " + content);
 
+                        LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
+
+                        TextView textViewReviewerName = new TextView(getContext());
+                        textViewReviewerName.setId(count);
+                        textViewReviewerName.setText(reviewerName);
+                        textViewReviewerName.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT));
+
+                        linearLayout.addView(textViewReviewerName);
+                        count++;
+//TODO: Details page listing reviews twice....
                     }
-*/
                         break;
             }
             if (mShareActionProvider != null) {

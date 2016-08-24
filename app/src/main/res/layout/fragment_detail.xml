@@ -79,6 +79,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <LinearLayout
+            android:layout_below="@+id/fragment_detail_textView_overview"
             android:id="@+id/fragment_detail_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

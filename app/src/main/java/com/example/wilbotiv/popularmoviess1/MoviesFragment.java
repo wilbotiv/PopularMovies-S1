@@ -1,6 +1,5 @@
 package com.example.wilbotiv.popularmoviess1;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -12,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +26,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     private final String LOG_TAG = MoviesFragment.class.getSimpleName();
     private MoviesAdapter mMoviesAdapter;
+    private final String INTENT_KEY = "com.example.wilbotiv.popularmoviess1.movieID";
 
     private static final String movieColumns[] = {
             MovieContract.MovieEntry._ID,
@@ -35,9 +34,9 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
             MovieContract.MovieEntry.COLUMN_MOVIE_ID
     };
 
-    static final int COL_MOVIE_ID = 0;
+    static final int COL_ID = 0;
     static final int COL_MOVIE_POSTER_PATH = 1;
-    static final int COL_MOVIE_COL_MOVIE_ID = 2;
+    static final int COL_MOVIE_ID = 2;
 
     private static final int MOVIE_LOADER = 0;
 
@@ -89,10 +88,12 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 //                String movies = mMoviesAdapter.getItem(position).posterPath;
 //                Toast.makeText(getActivity(), movies, Toast.LENGTH_SHORT).show();
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                int id = cursor.getInt(COL_MOVIE_ID);
+                int id = cursor.getInt(COL_ID);
+                String movieID = cursor.getString(COL_MOVIE_ID);
                 if (cursor != null) {
 //                  TODO: setData will need to be changed here to support Favorites detail view....
                     Intent intent = new Intent(getActivity(), DetailActivity.class).setData(MovieContract.MovieEntry.buildMovieUri(id));
+                    intent.putExtra(INTENT_KEY, movieID);
                     startActivity(intent);
                 }
 
@@ -108,7 +109,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void updateMovie() {
         FetchMovieTask movieTask = new FetchMovieTask(getActivity());
-//        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
+        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
 //        String location = Utility.getPreferredLocation(getActivity());
         Log.v(LOG_TAG, "updateMovie() called");
         movieTask.execute();
@@ -166,7 +167,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 //                        movie = MovieContract.MovieEntry.CONTENT_URI;
                         return new CursorLoader(getActivity(),
                                 movie,
-                                null,
+                                movieColumns,
                                 selection,
                                 null,
                                 null);

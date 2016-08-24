@@ -84,6 +84,7 @@ public class DetailActivity extends ActionBarActivity {
         private ShareActionProvider mShareActionProvider;
         //FIXED: mMovie needs to have originalTitle
         private String mMovie;
+        private final String INTENT_KEY = "com.example.wilbotiv.popularmoviess1.movieID";
 
         String posterPath;
         String originalTitle;
@@ -115,6 +116,13 @@ public class DetailActivity extends ActionBarActivity {
 
         public DetailFragment() {
             setHasOptionsMenu(true);
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            getLoaderManager().initLoader(DETAIL_LOADER_HEADER, null, this);
+            getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
         }
 
         @Override
@@ -173,7 +181,8 @@ public class DetailActivity extends ActionBarActivity {
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 //            TODO:Init another loader here?
-            getLoaderManager().initLoader(DETAIL_LOADER_HEADER, null, this);
+//            updateMovieReview();
+//            getLoaderManager().initLoader(DETAIL_LOADER_HEADER, null, this);
 //            getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
         }
 
@@ -204,11 +213,13 @@ public class DetailActivity extends ActionBarActivity {
 //                    Uri uri = intent.getData();
 //                    String movieIDFromPath = uri.getLastPathSegment();
                     Log.v(LOG_TAG, "In onCreateLoader case 1");
+                    String intentExtra = intent.getStringExtra(INTENT_KEY);
+                    Log.v(LOG_TAG, "At intent extra " + intentExtra);
                     return new CursorLoader(
                             getActivity(),
                             MovieContract.ReviewEntry.CONTENT_URI,
                             null,
-                            MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " =" + movieID,
+                            MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " =" + intentExtra,
                             null,
                             null
                     );
@@ -256,10 +267,12 @@ public class DetailActivity extends ActionBarActivity {
 
                     Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + posterPath).into(imageView);
 //TODO: updateMoviewReview() causes onLoadFinished() to run multiple times.
-                    updateMovieReview();
-                    getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
+//                    updateMovieReview();
+//                    getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
+
                     break;
                 case 1:
+//                    updateMovieReview();
                     Log.v(LOG_TAG, "In onLoadFinished case 1");
 //                    TODO: Create some views.
 //                    TODO: Change index in cursor to FINAL variable
@@ -278,14 +291,15 @@ public class DetailActivity extends ActionBarActivity {
                         LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
 
                         TextView textViewReviewerName = new TextView(getContext());
-                        textViewReviewerName.setId(count);
+//                        textViewReviewerName.setId(count);
                         textViewReviewerName.setText(reviewerName);
                         textViewReviewerName.setLayoutParams(new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT));
 
                         linearLayout.addView(textViewReviewerName);
-                        count++;
+//                      TODO: I don't need count anymore, right?
+//                        count++;
 //TODO: Details page listing reviews twice....
                     }
                         break;
@@ -299,10 +313,12 @@ public class DetailActivity extends ActionBarActivity {
 
         private void updateMovieReview() {
 //            FetchMovieTask movieTask = new FetchMovieTask(getActivity());
+            Intent intent = getActivity().getIntent();
+            String intentExtra = intent.getStringExtra(INTENT_KEY);
             FetchReviewTask fetchReviewTask = new FetchReviewTask(getContext());
             Log.v(LOG_TAG, "updateMovieReview() called");
 //            movieTask.execute();
-            fetchReviewTask.execute(movieID);
+            fetchReviewTask.execute(intentExtra);
         }
 
         @Override

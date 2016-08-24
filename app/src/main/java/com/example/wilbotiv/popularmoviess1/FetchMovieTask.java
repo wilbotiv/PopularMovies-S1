@@ -87,6 +87,9 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                 movieID = result.getString(ID);
                 voteAverage = result.getString(VOTE_AVERAGE);
 
+                FetchReviewTask fetchReviewTask = new FetchReviewTask(mContext);
+                fetchReviewTask.execute(movieID);
+
                 ContentValues movieValues = new ContentValues();
 
                 movieValues.put(MovieContract.MovieEntry.COLUMN_POSTERPATH, posterPath);
@@ -241,4 +244,8 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
         }
         return null;
     }
+
+
+
 }
+

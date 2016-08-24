@@ -33,8 +33,8 @@ import com.squareup.picasso.Picasso;
 
 //FIXED: DetailActivity does not scroll.....
 //TODO: Add views programmatically or ListView...
-//Todo: Let's call the API Review up front
-//TODO: Multiple loaders.
+//DONE: Let's call the API Review up front
+//DONE: Multiple loaders.
 public class DetailActivity extends ActionBarActivity {
 
 
@@ -181,7 +181,8 @@ public class DetailActivity extends ActionBarActivity {
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 //            TODO:Init another loader here?
-//            updateMovieReview();
+            Log.v(LOG_TAG, "In onActivityCreated");
+            updateMovieReview();
 //            getLoaderManager().initLoader(DETAIL_LOADER_HEADER, null, this);
 //            getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
         }
@@ -232,7 +233,7 @@ public class DetailActivity extends ActionBarActivity {
 //            Log.v(LOG_TAG, "In onLoadFinished");
 
             int loaderID = loader.getId();
-            Log.v(LOG_TAG, "In onLoadFinished " + "Loader ID is " + loaderID);
+            Log.v(LOG_TAG, "In onLoadFinished ");
 
             if (!data.moveToFirst()) {
                 return;
@@ -291,13 +292,24 @@ public class DetailActivity extends ActionBarActivity {
                         LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
 
                         TextView textViewReviewerName = new TextView(getContext());
+                        TextView textViewContent = new TextView(getContext());
 //                        textViewReviewerName.setId(count);
                         textViewReviewerName.setText(reviewerName);
+//                        TODO: Use r.demension instead of hard code
+                        textViewReviewerName.setTextSize(15);
                         textViewReviewerName.setLayoutParams(new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT));
 
+//                        textViewContent.setText(content);
+//                        textViewContent.setTextSize(20);
+//                        textViewContent.setLayoutParams(new LinearLayout.LayoutParams(
+//                                LinearLayout.LayoutParams.MATCH_PARENT,
+//                                LinearLayout.LayoutParams.MATCH_PARENT));
+
+
                         linearLayout.addView(textViewReviewerName);
+//                        linearLayout.addView(textViewContent);
 //                      TODO: I don't need count anymore, right?
 //                        count++;
 //TODO: Details page listing reviews twice....
@@ -316,7 +328,7 @@ public class DetailActivity extends ActionBarActivity {
             Intent intent = getActivity().getIntent();
             String intentExtra = intent.getStringExtra(INTENT_KEY);
             FetchReviewTask fetchReviewTask = new FetchReviewTask(getContext());
-            Log.v(LOG_TAG, "updateMovieReview() called");
+            Log.v(LOG_TAG, "In updateMovieReview");
 //            movieTask.execute();
             fetchReviewTask.execute(intentExtra);
         }

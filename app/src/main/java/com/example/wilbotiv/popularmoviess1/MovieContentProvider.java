@@ -20,6 +20,7 @@ public class MovieContentProvider extends ContentProvider {
     static final int FAVORITE = 200;
     static final int REVIEW = 300;
     static final int REVIEW_DETAIL = 301;
+    static final int TRAILER = 400;
 
     static UriMatcher buildUriMatcher() {
         // I know what you're thinking.  Why create a UriMatcher when you can use regular
@@ -37,6 +38,7 @@ public class MovieContentProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_FAVORITE, FAVORITE);
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW);
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW_DETAIL);
+        matcher.addURI(authority, MovieContract.PATH_TRAILERS, TRAILER);
 //        matcher.addURI(authority, MovieContract.PATH_REVIEWS + "/#", REVIEW_DETAIL);
         return matcher;
     }
@@ -103,6 +105,18 @@ public class MovieContentProvider extends ContentProvider {
             case REVIEW_DETAIL: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.ReviewEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null
+                );
+                break;
+            }
+            case TRAILER: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        MovieContract.TrailerEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -254,6 +268,24 @@ public class MovieContentProvider extends ContentProvider {
                     for (ContentValues value : values) {
 //                        normalizeDate(value);
                         long _id = db.insert(MovieContract.ReviewEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+
+            case TRAILER:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+//                        normalizeDate(value);
+                        long _id = db.insert(MovieContract.TrailerEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }

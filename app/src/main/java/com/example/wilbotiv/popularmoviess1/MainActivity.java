@@ -24,6 +24,7 @@ import com.facebook.stetho.Stetho;
 //Done: TOAST in Favorite to SAY "You added x to Favoites"....
 //DONE: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
 //TODO: Top rated views are sometimes messed-up
+//TODO: append us localization to moviedb api
 //Done: Change movie URI so that we use WHERE instead of sort order
 //Done: Reviews table, create it
 //Done: Create new Asynctask for review. Fetch and JSON Parsing

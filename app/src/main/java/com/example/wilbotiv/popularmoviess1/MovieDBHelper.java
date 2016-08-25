@@ -57,10 +57,19 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.ReviewEntry.COLUMN_COMMENT_ID + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL " +
                 ");";
 
+        final String SQL_CREATE_TRAILER_TABLE = "CREATE TABLE " + MovieContract.TrailerEntry.TABLE_NAME + " (" +
+                MovieContract.TrailerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
+                MovieContract.TrailerEntry.COLUMN_NAME+ " TEXT NOT NULL, " +
+                MovieContract.TrailerEntry.COLUMN_SOURCE+ " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL " +
+//                MovieContract.ReviewEntry.COLUMN_COMMENT_ID + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL " +
+                ");";
+
 //        TODO:I think that these are not working if already exist.
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_FAVORITE_TABLE);
         db.execSQL(SQL_CREATE_REVIEW_TABLE);
+        db.execSQL(SQL_CREATE_TRAILER_TABLE);
     }
 }
 

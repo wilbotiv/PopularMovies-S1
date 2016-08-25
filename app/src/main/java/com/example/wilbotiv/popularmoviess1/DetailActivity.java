@@ -79,6 +79,9 @@ public class DetailActivity extends ActionBarActivity {
 
         private static final int DETAIL_LOADER_HEADER = 0;
         private static final int DETAIL_LOADER_REVIEWS = 1;
+        private static final int DETAIL_LOADER_TRAILERS = 2;
+
+
         private static final String LOG_TAG = DetailActivity.class.getSimpleName();
         private static final String MOVIE_SHARE_HASHTAG = " #PopularMoviesS1";
         private ShareActionProvider mShareActionProvider;
@@ -123,11 +126,14 @@ public class DetailActivity extends ActionBarActivity {
             super.onResume();
             getLoaderManager().initLoader(DETAIL_LOADER_HEADER, null, this);
             getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
+            getLoaderManager().initLoader(DETAIL_LOADER_TRAILERS, null, this);
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
+
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
             Button button = (Button) rootView.findViewById(R.id.fragment_detail_button);
             button.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +189,7 @@ public class DetailActivity extends ActionBarActivity {
 //            TODO:Init another loader here?
             Log.v(LOG_TAG, "In onActivityCreated");
             updateMovieReview();
+            updateMovieTrailer();
 //            getLoaderManager().initLoader(DETAIL_LOADER_HEADER, null, this);
 //            getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
         }
@@ -191,6 +198,7 @@ public class DetailActivity extends ActionBarActivity {
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             Log.v(LOG_TAG, "In onCreateLoader");
             Intent intent = getActivity().getIntent();
+            String intentExtra = intent.getStringExtra(INTENT_KEY);
             if (intent == null) {
                 return null;
             }
@@ -214,7 +222,7 @@ public class DetailActivity extends ActionBarActivity {
 //                    Uri uri = intent.getData();
 //                    String movieIDFromPath = uri.getLastPathSegment();
                     Log.v(LOG_TAG, "In onCreateLoader case 1");
-                    String intentExtra = intent.getStringExtra(INTENT_KEY);
+//                    String intentExtra = intent.getStringExtra(INTENT_KEY);
                     Log.v(LOG_TAG, "At intent extra " + intentExtra);
                     return new CursorLoader(
                             getActivity(),
@@ -224,6 +232,23 @@ public class DetailActivity extends ActionBarActivity {
                             null,
                             null
                     );
+                case 2:
+//                    Uri uri = MovieContract.ReviewEntry.buildReviewUri(140607);
+//                    TODO: You cant use movieID, because it may be null. Get movieID from intent?
+//                    Uri uri = intent.getData();
+//                    String movieIDFromPath = uri.getLastPathSegment();
+                    Log.v(LOG_TAG, "In onCreateLoader case 2");
+//                    String intentExtra = intent.getStringExtra(INTENT_KEY);
+                    Log.v(LOG_TAG, "At intent extra " + intentExtra);
+                    return new CursorLoader(
+                            getActivity(),
+                            MovieContract.TrailerEntry.CONTENT_URI,
+                            null,
+                            MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " =" + intentExtra,
+                            null,
+                            null
+                    );
+
             }
             return null;
         }
@@ -257,7 +282,7 @@ public class DetailActivity extends ActionBarActivity {
                     ImageView imageView = (ImageView) getView().findViewById(R.id.fragment_detail_imageView_poster);
                     TextView textViewReleaseDate = (TextView) getView().findViewById(R.id.fragment_detail_textView_releaseDate);
                     TextView textViewVoteAverage = (TextView) getView().findViewById(R.id.fragment_detail_textView_voteAverage);
-                    TextView textViewMovieID= (TextView) getView().findViewById(R.id.fragment_detail_textView_movieID);
+                    TextView textViewMovieID = (TextView) getView().findViewById(R.id.fragment_detail_textView_movieID);
                     TextView textViewOverview = (TextView) getView().findViewById(R.id.fragment_detail_textView_overview);
 //
                     textViewOriginalTitle.setText(originalTitle);
@@ -286,6 +311,7 @@ public class DetailActivity extends ActionBarActivity {
 //                    Using removeAllViews because onLoadFinished is being called twice even though I have
 //                    I'm init'ing cursorLoader in onResume. I think because my fetchMovieReview(async) is not
 //                    completed when onLoadFinish runs query??? Anyway this seems to work.
+//                    TODO: This might be a problem with trailers...
                     LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
                     linearLayout.removeAllViews();
 
@@ -298,10 +324,12 @@ public class DetailActivity extends ActionBarActivity {
 //                        LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
 
 
-
+//TODO: use mContext
                         TextView textViewReviewerName = new TextView(getContext());
                         TextView textViewContent = new TextView(getContext());
-//                        textViewReviewerName.setId(count);
+
+
+//      textViewReviewerName.setId(count);
                         textViewReviewerName.setText(reviewerName);
 //                        TODO: Use r.demension instead of hard code
                         textViewReviewerName.setTextSize(15);
@@ -322,7 +350,31 @@ public class DetailActivity extends ActionBarActivity {
 //                        count++;
 //TODO: Details page listing reviews twice....
                     }
-                        break;
+                    break;
+                case 2:
+                    Log.v(LOG_TAG, "In onLoadFinished case 2");
+                    LinearLayout linearLayoutTrailer = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout_trailer);
+
+                    for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
+                        String name = data.getString(2);
+                        String source = data.getString(3);
+
+//                        String content = data.getString(3);
+                        Log.v(LOG_TAG, "In onLoadFinished case 2 " + name + " " + source);
+
+
+                        TextView textViewTrailerName = new TextView(getContext());
+
+                        textViewTrailerName.setText(name);
+//                        TODO: Use r.demension instead of hard code
+                        textViewTrailerName.setTextSize(25);
+                        textViewTrailerName.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT));
+                        linearLayoutTrailer.addView(textViewTrailerName);
+                    }
+
+                    break;
             }
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareMovieIntent());
@@ -339,6 +391,16 @@ public class DetailActivity extends ActionBarActivity {
             Log.v(LOG_TAG, "In updateMovieReview");
 //            movieTask.execute();
             fetchReviewTask.execute(intentExtra);
+        }
+
+        private void updateMovieTrailer() {
+//            FetchMovieTask movieTask = new FetchMovieTask(getActivity());
+            Intent intent = getActivity().getIntent();
+            String intentExtra = intent.getStringExtra(INTENT_KEY);
+            FetchTrailerTask fetchTrailerTask = new FetchTrailerTask(getContext());
+            Log.v(LOG_TAG, "In updateMovieTrailer");
+//            movieTask.execute();
+            fetchTrailerTask.execute(intentExtra);
         }
 
         @Override

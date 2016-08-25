@@ -109,7 +109,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void updateMovie() {
         FetchMovieTask movieTask = new FetchMovieTask(getActivity());
-        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
+//        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
 //        String location = Utility.getPreferredLocation(getActivity());
         Log.v(LOG_TAG, "updateMovie() called");
         movieTask.execute();

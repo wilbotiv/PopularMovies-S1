@@ -166,4 +166,8 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+    }
 }

@@ -186,12 +186,16 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                 final String BASE_URL = "http://api.themoviedb.org/3/discover/movie";
                 final String API_KEY = "api_key";
                 final String SORT_ORDER = "sort_by";
+//append_to_response does not work in discover method
+//                final String APPEND_TO_RESPONSE = "append_to_response";
+//                final String APPEND_TO_RESPONSE_VALUE = "reviews,trailers";
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                         .appendQueryParameter(SORT_ORDER, sortOrder)
+//                        .appendQueryParameter(APPEND_TO_RESPONSE, APPEND_TO_RESPONSE_VALUE)
                         .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
-                Log.v(LOG_TAG, builtUri.toString());
+                Log.v(LOG_TAG, "The URL for FetchMovie " + builtUri.toString());
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");

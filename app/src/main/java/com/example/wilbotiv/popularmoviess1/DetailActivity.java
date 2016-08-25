@@ -283,13 +283,21 @@ public class DetailActivity extends ActionBarActivity {
 
 //                    for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
 
-                    int count = 0;
+//                    Using removeAllViews because onLoadFinished is being called twice even though I have
+//                    I'm init'ing cursorLoader in onResume. I think because my fetchMovieReview(async) is not
+//                    completed when onLoadFinish runs query??? Anyway this seems to work.
+                    LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
+                    linearLayout.removeAllViews();
+
+//                    int count = 0;
                     for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
                         String reviewerName = data.getString(2);
                         String content = data.getString(3);
                         Log.v(LOG_TAG, " " + reviewerName + " " + content);
 
-                        LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
+//                        LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
+
+
 
                         TextView textViewReviewerName = new TextView(getContext());
                         TextView textViewContent = new TextView(getContext());
@@ -301,15 +309,15 @@ public class DetailActivity extends ActionBarActivity {
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT));
 
-//                        textViewContent.setText(content);
-//                        textViewContent.setTextSize(20);
-//                        textViewContent.setLayoutParams(new LinearLayout.LayoutParams(
-//                                LinearLayout.LayoutParams.MATCH_PARENT,
-//                                LinearLayout.LayoutParams.MATCH_PARENT));
+                        textViewContent.setText(content);
+                        textViewContent.setTextSize(20);
+                        textViewContent.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT));
 
 
                         linearLayout.addView(textViewReviewerName);
-//                        linearLayout.addView(textViewContent);
+                        linearLayout.addView(textViewContent);
 //                      TODO: I don't need count anymore, right?
 //                        count++;
 //TODO: Details page listing reviews twice....

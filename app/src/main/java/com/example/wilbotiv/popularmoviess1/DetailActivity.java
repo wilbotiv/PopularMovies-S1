@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.net.URI;
+
 //FIXED: DetailActivity does not scroll.....
 //TODO: Add views programmatically or ListView...
 //DONE: Let's call the API Review up front
@@ -356,14 +358,29 @@ public class DetailActivity extends ActionBarActivity {
                     LinearLayout linearLayoutTrailer = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout_trailer);
 
                     for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
-                        String name = data.getString(2);
-                        String source = data.getString(3);
+                        final String name = data.getString(2);
+                        final String source = data.getString(3);
 
 //                        String content = data.getString(3);
                         Log.v(LOG_TAG, "In onLoadFinished case 2 " + name + " " + source);
 
+                        Button trailerButton = new Button(getContext());
 
                         TextView textViewTrailerName = new TextView(getContext());
+// TODO: 8/26/2016 use string resource
+                        trailerButton.setText(name);
+                        trailerButton.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT));
+                        trailerButton.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
+                                Log.v(LOG_TAG, "In on click");
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + source)));
+                            }
+                        });
 
                         textViewTrailerName.setText(name);
 //                        TODO: Use r.demension instead of hard code
@@ -371,7 +388,12 @@ public class DetailActivity extends ActionBarActivity {
                         textViewTrailerName.setLayoutParams(new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT));
+
                         linearLayoutTrailer.addView(textViewTrailerName);
+                        linearLayoutTrailer.addView(trailerButton);
+
+
+
                     }
 
                     break;

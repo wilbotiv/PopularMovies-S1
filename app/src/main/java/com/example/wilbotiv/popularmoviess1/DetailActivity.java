@@ -31,10 +31,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.net.URI;
 
-//FIXED: DetailActivity does not scroll.....
-//TODO: Add views programmatically or ListView...
+//DONE: DetailActivity does not scroll.....
+//DONE: Add views programmatically or ListView...
 //DONE: Let's call the API Review up front
 //DONE: Multiple loaders.
 public class DetailActivity extends ActionBarActivity {
@@ -59,12 +58,8 @@ public class DetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
@@ -74,9 +69,6 @@ public class DetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
         private static final int DETAIL_LOADER_HEADER = 0;
@@ -100,7 +92,6 @@ public class DetailActivity extends ActionBarActivity {
 
 
         private static final String[] MOVIE_COLUMNS = {
-//                MovieContract.MovieEntry._ID,
                 MovieContract.MovieEntry.COLUMN_POSTERPATH,
                 MovieContract.MovieEntry.COLUMN_ORIGINALTITLE,
                 MovieContract.MovieEntry.COLUMN_RELEASEDATE,
@@ -109,7 +100,6 @@ public class DetailActivity extends ActionBarActivity {
                 MovieContract.MovieEntry.COLUMN_VOTEAVERAGE,
         };
 
-        //        private static final int _ID = 0;
         private static final int COL_POSTER_PATH = 0;
         private static final int COL_ORIGINAL_TITLE = 1;
         private static final int COL_REALEASEDATE = 2;
@@ -117,7 +107,24 @@ public class DetailActivity extends ActionBarActivity {
         private static final int COL_MOVIE_ID = 4;
         private static final int COL_VOTE_AVERAAGE = 5;
 
-//        Uri detailUri;
+//// TODO: 8/28/2016 Projection and index for case 1
+
+        private static final String[] REVIEWS_COLUMNS = {
+            MovieContract.ReviewEntry.COLUMN_AUTHOR,
+            MovieContract.ReviewEntry.COLUMN_CONTENT
+        };
+
+        private static final int COL_AUTHOR = 0;
+        private static final int COL_CONTENT = 1;
+
+        private static final String[] TRAILER_COLUMNS = {
+                MovieContract.TrailerEntry.COLUMN_NAME,
+                MovieContract.TrailerEntry.COLUMN_SOURCE
+        };
+
+        private static final int COL_NAME = 0;
+        private static final int COL_SOURCE = 1;
+
 
         public DetailFragment() {
             setHasOptionsMenu(true);
@@ -163,12 +170,9 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             inflater.inflate(R.menu.detailfragment, menu);
-
             MenuItem menuItem = menu.findItem(R.id.action_share);
-
             mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
-//            Working on share intent need to cook dinner...
             if (mMovie != null) {
                 mShareActionProvider.setShareIntent(createShareMovieIntent());
             }
@@ -179,7 +183,6 @@ public class DetailActivity extends ActionBarActivity {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             shareIntent.setType("text/plain");
-//            shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
             //FIXED: Add Original Title here.
             shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
             return shareIntent;
@@ -188,12 +191,10 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-//            TODO:Init another loader here?
+//            DONE:Init another loader here? - No.
             Log.v(LOG_TAG, "In onActivityCreated");
             updateMovieReview();
             updateMovieTrailer();
-//            getLoaderManager().initLoader(DETAIL_LOADER_HEADER, null, this);
-//            getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
         }
 
         @Override
@@ -205,8 +206,7 @@ public class DetailActivity extends ActionBarActivity {
                 return null;
             }
             int loaderID = id;
-            // Now create and return a CursorLoader that will take care of
-            // creating a Cursor for the data being displayed.
+
             switch (loaderID) {
                 case 0:
                     Log.v(LOG_TAG, "In onCreateLoader case 0");
@@ -218,47 +218,38 @@ public class DetailActivity extends ActionBarActivity {
                             null,
                             null
                     );
+
                 case 1:
-//                    Uri uri = MovieContract.ReviewEntry.buildReviewUri(140607);
-//                    TODO: You cant use movieID, because it may be null. Get movieID from intent?
-//                    Uri uri = intent.getData();
-//                    String movieIDFromPath = uri.getLastPathSegment();
+//                    DONE: You cant use movieID, because it may be null. Get movieID from intent?
                     Log.v(LOG_TAG, "In onCreateLoader case 1");
-//                    String intentExtra = intent.getStringExtra(INTENT_KEY);
                     Log.v(LOG_TAG, "At intent extra " + intentExtra);
                     return new CursorLoader(
                             getActivity(),
                             MovieContract.ReviewEntry.CONTENT_URI,
-                            null,
+                            REVIEWS_COLUMNS,
                             MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " =" + intentExtra,
                             null,
                             null
                     );
+
                 case 2:
-//                    Uri uri = MovieContract.ReviewEntry.buildReviewUri(140607);
-//                    TODO: You cant use movieID, because it may be null. Get movieID from intent?
-//                    Uri uri = intent.getData();
-//                    String movieIDFromPath = uri.getLastPathSegment();
+//                    DONE: You cant use movieID, because it may be null. Get movieID from intent?
                     Log.v(LOG_TAG, "In onCreateLoader case 2");
-//                    String intentExtra = intent.getStringExtra(INTENT_KEY);
                     Log.v(LOG_TAG, "At intent extra " + intentExtra);
                     return new CursorLoader(
                             getActivity(),
                             MovieContract.TrailerEntry.CONTENT_URI,
-                            null,
+                            TRAILER_COLUMNS,
                             MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " =" + intentExtra,
                             null,
                             null
                     );
-
             }
             return null;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//            Log.v(LOG_TAG, "In onLoadFinished");
-
             int loaderID = loader.getId();
             Log.v(LOG_TAG, "In onLoadFinished ");
 
@@ -294,44 +285,30 @@ public class DetailActivity extends ActionBarActivity {
                     textViewOverview.setText(overview);
 
                     Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + posterPath).into(imageView);
-//TODO: updateMoviewReview() causes onLoadFinished() to run multiple times.
-//                    updateMovieReview();
-//                    getLoaderManager().initLoader(DETAIL_LOADER_REVIEWS, null, this);
-
+//DONE: updateMoviewReview() causes onLoadFinished() to run multiple times.
                     break;
-                case 1:
-//                    updateMovieReview();
-                    Log.v(LOG_TAG, "In onLoadFinished case 1");
-//                    TODO: Create some views.
-//                    TODO: Change index in cursor to FINAL variable
-//                    String reviewerName = data.getString(2);
-//                    String content = data.getString(3);
-//                    Log.v(LOG_TAG, " " + reviewerName + " " + content);
 
-//                    for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
+                case 1:
+                    Log.v(LOG_TAG, "In onLoadFinished case 1");
+//                    DONE: Create some views.
+//                    TODO: Change index in cursor to FINAL variable
 
 //                    Using removeAllViews because onLoadFinished is being called twice even though I have
-//                    I'm init'ing cursorLoader in onResume. I think because my fetchMovieReview(async) is not
+//                    it init'ing cursorLoader in onResume(). I think because my fetchMovieReview (AsyncTask) is not
 //                    completed when onLoadFinish runs query??? Anyway this seems to work.
-//                    TODO: This might be a problem with trailers...
+
+//                    DONE: This might be a problem with trailers...
                     LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
                     linearLayout.removeAllViews();
 
-//                    int count = 0;
                     for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
-                        String reviewerName = data.getString(2);
-                        String content = data.getString(3);
+                        String reviewerName = data.getString(COL_NAME);
+                        String content = data.getString(COL_CONTENT);
                         Log.v(LOG_TAG, " " + reviewerName + " " + content);
-
-//                        LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
-
-
 //TODO: use mContext
                         TextView textViewReviewerName = new TextView(getContext());
                         TextView textViewContent = new TextView(getContext());
 
-
-//      textViewReviewerName.setId(count);
                         textViewReviewerName.setText(reviewerName);
 //                        TODO: Use r.demension instead of hard code
                         textViewReviewerName.setTextSize(15);
@@ -345,29 +322,27 @@ public class DetailActivity extends ActionBarActivity {
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT));
 
-
                         linearLayout.addView(textViewReviewerName);
                         linearLayout.addView(textViewContent);
-//                      TODO: I don't need count anymore, right?
-//                        count++;
+//                      DONE: I don't need count anymore, right?
 //TODO: Details page listing reviews twice....
                     }
                     break;
+
                 case 2:
                     Log.v(LOG_TAG, "In onLoadFinished case 2");
                     LinearLayout linearLayoutTrailer = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout_trailer);
 
                     for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
-                        final String name = data.getString(2);
-                        final String source = data.getString(3);
+                        final String name = data.getString(COL_NAME);
+                        final String source = data.getString(COL_SOURCE);
 
-//                        String content = data.getString(3);
                         Log.v(LOG_TAG, "In onLoadFinished case 2 " + name + " " + source);
 
                         Button trailerButton = new Button(getContext());
-
                         TextView textViewTrailerName = new TextView(getContext());
 // TODO: 8/26/2016 use string resource
+
                         trailerButton.setText(name);
                         trailerButton.setLayoutParams(new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -391,37 +366,27 @@ public class DetailActivity extends ActionBarActivity {
 
                         linearLayoutTrailer.addView(textViewTrailerName);
                         linearLayoutTrailer.addView(trailerButton);
-
-
-
                     }
-
                     break;
             }
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareMovieIntent());
             }
-
-//            updateMovieReview();
         }
 
         private void updateMovieReview() {
-//            FetchMovieTask movieTask = new FetchMovieTask(getActivity());
             Intent intent = getActivity().getIntent();
             String intentExtra = intent.getStringExtra(INTENT_KEY);
             FetchReviewTask fetchReviewTask = new FetchReviewTask(getContext());
             Log.v(LOG_TAG, "In updateMovieReview");
-//            movieTask.execute();
             fetchReviewTask.execute(intentExtra);
         }
 
         private void updateMovieTrailer() {
-//            FetchMovieTask movieTask = new FetchMovieTask(getActivity());
             Intent intent = getActivity().getIntent();
             String intentExtra = intent.getStringExtra(INTENT_KEY);
             FetchTrailerTask fetchTrailerTask = new FetchTrailerTask(getContext());
             Log.v(LOG_TAG, "In updateMovieTrailer");
-//            movieTask.execute();
             fetchTrailerTask.execute(intentExtra);
         }
 

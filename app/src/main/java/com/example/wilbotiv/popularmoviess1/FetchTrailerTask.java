@@ -75,7 +75,7 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
 
             int inserted = 0;
 
-            //TODO: Delete all rows in table before fetch?
+            //Done: Delete all rows in table before fetch? - Don't think that this is really necessary.
             // "I think not instead do this I used ContentResolver.delete() to delete the records in table.
             // I had a ContentProvider implemented so it made sense to use this."
 

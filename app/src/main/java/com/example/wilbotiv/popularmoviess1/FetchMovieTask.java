@@ -106,7 +106,7 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
 
             int inserted = 0;
 
-            //TODO: Delete all rows in table before fetch?
+            //Done: Delete all rows in table before fetch? - Did this in updateMovie() method
             // "I think not instead do this I used ContentResolver.delete() to delete the records in table.
             // I had a ContentProvider implemented so it made sense to use this."
 

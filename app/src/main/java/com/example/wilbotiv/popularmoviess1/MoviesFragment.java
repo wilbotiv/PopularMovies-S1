@@ -65,7 +65,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-//            TODO: Do I really need to fetch...
+//            Done: Do I really need to fetch... - Yes, I want to refresh here.
             updateMovie();
             return true;
         }
@@ -92,7 +92,8 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                 String movieID = cursor.getString(COL_MOVIE_ID);
                 if (cursor != null) {
 //                  TODO: setData will need to be changed here to support Favorites detail view....
-                    Intent intent = new Intent(getActivity(), DetailActivity.class).setData(MovieContract.MovieEntry.buildMovieUri(id));
+                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+                            .setData(MovieContract.MovieEntry.buildMovieUri(id));
                     intent.putExtra(INTENT_KEY, movieID);
                     startActivity(intent);
                 }
@@ -108,6 +109,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void updateMovie() {
+        getActivity().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
         FetchMovieTask movieTask = new FetchMovieTask(getActivity());
 //        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
 //        String location = Utility.getPreferredLocation(getActivity());
@@ -161,33 +163,33 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 //        Need to read pref file then if else if a URI.. Girls back from ballet need to get dinner ready....
 
 //What if changed sortOrder to int then switch to one of three different loaders, branch first...
-                switch (id) {
-                    case MOVIE_LOADER:
+        switch (id) {
+            case MOVIE_LOADER:
 //                Uri movie = MovieContract.FavoriteEntry.CONTENT_URI;
 //                        movie = MovieContract.MovieEntry.CONTENT_URI;
-                        return new CursorLoader(getActivity(),
-                                movie,
-                                movieColumns,
-                                selection,
-                                null,
-                                null);
+                return new CursorLoader(getActivity(),
+                        movie,
+                        movieColumns,
+                        selection,
+                        null,
+                        null);
 //                        MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
 
 //FIXED: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
 //                return new CursorLoader(getActivity(), movie, null, null, null, null);
 
-                }
-
-                return null;
-            }
-
-            @Override
-            public void onLoadFinished (Loader < Cursor > loader, Cursor data){
-                mMoviesAdapter.swapCursor(data);
-            }
-
-            @Override
-            public void onLoaderReset (Loader < Cursor > loader) {
-                mMoviesAdapter.swapCursor(null);
-            }
         }
+
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mMoviesAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mMoviesAdapter.swapCursor(null);
+    }
+}

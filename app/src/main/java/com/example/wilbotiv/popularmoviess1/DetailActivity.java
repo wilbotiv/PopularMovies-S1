@@ -298,7 +298,7 @@ public class DetailActivity extends ActionBarActivity {
 //                    completed when onLoadFinish runs query??? Anyway this seems to work.
 
 //                    DONE: This might be a problem with trailers...
-                    LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout);
+                    LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout_review);
                     linearLayout.removeAllViews();
 
                     for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
@@ -340,7 +340,7 @@ public class DetailActivity extends ActionBarActivity {
                         Log.v(LOG_TAG, "In onLoadFinished case 2 " + name + " " + source);
 
                         Button trailerButton = new Button(getContext());
-                        TextView textViewTrailerName = new TextView(getContext());
+//                        TextView textViewTrailerName = new TextView(getContext());
 // TODO: 8/26/2016 use string resource
 
                         trailerButton.setText(name);
@@ -357,14 +357,14 @@ public class DetailActivity extends ActionBarActivity {
                             }
                         });
 
-                        textViewTrailerName.setText(name);
+//                        textViewTrailerName.setText(name);
 //                        TODO: Use r.demension instead of hard code
-                        textViewTrailerName.setTextSize(25);
-                        textViewTrailerName.setLayoutParams(new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.MATCH_PARENT));
+//                        textViewTrailerName.setTextSize(25);
+//                        textViewTrailerName.setLayoutParams(new LinearLayout.LayoutParams(
+//                                LinearLayout.LayoutParams.MATCH_PARENT,
+//                                LinearLayout.LayoutParams.MATCH_PARENT));
 
-                        linearLayoutTrailer.addView(textViewTrailerName);
+//                        linearLayoutTrailer.addView(textViewTrailerName);
                         linearLayoutTrailer.addView(trailerButton);
                     }
                     break;

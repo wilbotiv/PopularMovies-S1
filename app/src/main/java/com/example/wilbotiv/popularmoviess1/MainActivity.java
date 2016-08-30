@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import com.facebook.stetho.Stetho;
 
 //DONE: INSTALL - Stetho guide - an Android app debug tool
-//TODO: Allow users to view and play trailers
-//TODO: read reviews of a selected movie.
+//DONE: Allow users to view and play trailers
+//DONE: read reviews of a selected movie.
 //DONE: Mark a movie as a favorite in the details view by tapping a button
 //Done: FavoriteActivity.
 //Done: DetailActivity for Favorites.
@@ -28,6 +28,7 @@ import com.facebook.stetho.Stetho;
 //Done: Change movie URI so that we use WHERE instead of sort order
 //Done: Reviews table, create it
 //Done: Create new Asynctask for review. Fetch and JSON Parsing
+//// TODO: 8/29/2016 trailerButton view duplicates after trailer intent launches
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();

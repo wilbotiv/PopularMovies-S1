@@ -11,6 +11,12 @@
     <string name="title_prefs_general">Sort Order</string>
     <string name="key_prefs_general">sort_order</string>
     <string name="action_share">Share</string>
+    <string name="favorite_button_text">Mark as Favorite</string>
+    <string name="sample_release_Date">August 2016</string>
+    <string name="sample_title">Fancy Felix</string>
+    <string name="sample_rating">1 Star</string>
+    <string name="sample_movieID">140607</string>
+    <string name="sample_overview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at ante. Mauris eleifend, quam a vulputate dictum, massa quam dapibus leo, eget vulputate orci purus ut lorem.</string>
 
 
 </resources>

@@ -28,7 +28,8 @@ import com.facebook.stetho.Stetho;
 //Done: Change movie URI so that we use WHERE instead of sort order
 //Done: Reviews table, create it
 //Done: Create new Asynctask for review. Fetch and JSON Parsing
-//// TODO: 8/29/2016 trailerButton view duplicates after trailer intent launches
+//// DONE: 8/29/2016 trailerButton view duplicates after trailer intent launches
+//// TODO: 8/30/2016 Is top rated pulling trailers and reveiws?
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();

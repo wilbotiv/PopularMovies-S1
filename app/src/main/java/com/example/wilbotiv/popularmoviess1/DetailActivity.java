@@ -2,6 +2,7 @@ package com.example.wilbotiv.popularmoviess1;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.media.RatingCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -107,7 +109,7 @@ public class DetailActivity extends ActionBarActivity {
         private static final int COL_MOVIE_ID = 4;
         private static final int COL_VOTE_AVERAAGE = 5;
 
-//// TODO: 8/28/2016 Projection and index for case 1
+//// DONE: 8/28/2016 Projection and index for case 1
 
         private static final String[] REVIEWS_COLUMNS = {
             MovieContract.ReviewEntry.COLUMN_AUTHOR,
@@ -252,7 +254,7 @@ public class DetailActivity extends ActionBarActivity {
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             int loaderID = loader.getId();
             Log.v(LOG_TAG, "In onLoadFinished ");
-
+            Context context = getContext();
             if (!data.moveToFirst()) {
                 return;
             }
@@ -284,14 +286,14 @@ public class DetailActivity extends ActionBarActivity {
                     textViewMovieID.setText(movieID);
                     textViewOverview.setText(overview);
 
-                    Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w500" + posterPath).into(imageView);
+                    Picasso.with(context).load("http://image.tmdb.org/t/p/w500" + posterPath).into(imageView);
 //DONE: updateMoviewReview() causes onLoadFinished() to run multiple times.
                     break;
 
                 case 1:
                     Log.v(LOG_TAG, "In onLoadFinished case 1");
 //                    DONE: Create some views.
-//                    TODO: Change index in cursor to FINAL variable
+//                    DONE: Change index in cursor to FINAL variable
 
 //                    Using removeAllViews because onLoadFinished is being called twice even though I have
 //                    it init'ing cursorLoader in onResume(). I think because my fetchMovieReview (AsyncTask) is not
@@ -302,22 +304,22 @@ public class DetailActivity extends ActionBarActivity {
                     linearLayout.removeAllViews();
 
                     for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
-                        String reviewerName = data.getString(COL_NAME);
+                        String reviewerName = data.getString(COL_AUTHOR);
                         String content = data.getString(COL_CONTENT);
                         Log.v(LOG_TAG, " " + reviewerName + " " + content);
-//TODO: use mContext
-                        TextView textViewReviewerName = new TextView(getContext());
-                        TextView textViewContent = new TextView(getContext());
+//DONE: use member variable context
+                        TextView textViewReviewerName = new TextView(context);
+                        TextView textViewContent = new TextView(context);
 
                         textViewReviewerName.setText(reviewerName);
-//                        TODO: Use r.demension instead of hard code
-                        textViewReviewerName.setTextSize(15);
+//                        DONE: Use r.demension instead of hard code
+                        textViewReviewerName.setTextSize(getResources().getDimension(R.dimen.text_size_reviewer));
                         textViewReviewerName.setLayoutParams(new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT));
 
                         textViewContent.setText(content);
-                        textViewContent.setTextSize(20);
+                        textViewContent.setTextSize(getResources().getDimension(R.dimen.text_size_review));
                         textViewContent.setLayoutParams(new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT));
@@ -325,13 +327,14 @@ public class DetailActivity extends ActionBarActivity {
                         linearLayout.addView(textViewReviewerName);
                         linearLayout.addView(textViewContent);
 //                      DONE: I don't need count anymore, right?
-//TODO: Details page listing reviews twice....
+//DONE: Details page listing reviews twice....
                     }
                     break;
 
                 case 2:
                     Log.v(LOG_TAG, "In onLoadFinished case 2");
                     LinearLayout linearLayoutTrailer = (LinearLayout) getView().findViewById(R.id.fragment_detail_linearLayout_trailer);
+                    linearLayoutTrailer.removeAllViews();
 
                     for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
                         final String name = data.getString(COL_NAME);
@@ -341,7 +344,7 @@ public class DetailActivity extends ActionBarActivity {
 
                         Button trailerButton = new Button(getContext());
 //                        TextView textViewTrailerName = new TextView(getContext());
-// TODO: 8/26/2016 use string resource
+// DONE: 8/26/2016 use string resource
 
                         trailerButton.setText(name);
                         trailerButton.setLayoutParams(new LinearLayout.LayoutParams(
@@ -358,7 +361,7 @@ public class DetailActivity extends ActionBarActivity {
                         });
 
 //                        textViewTrailerName.setText(name);
-//                        TODO: Use r.demension instead of hard code
+//                        DONE: Use r.demension instead of hard code
 //                        textViewTrailerName.setTextSize(25);
 //                        textViewTrailerName.setLayoutParams(new LinearLayout.LayoutParams(
 //                                LinearLayout.LayoutParams.MATCH_PARENT,

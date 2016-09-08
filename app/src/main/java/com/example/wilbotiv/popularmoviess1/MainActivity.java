@@ -23,14 +23,15 @@ import com.facebook.stetho.Stetho;
 //Doone: movieTable keeps growing.... fetch called too often.
 //Done: TOAST in Favorite to SAY "You added x to Favoites"....
 //DONE: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
-//TODO: Top rated views are sometimes messed-up
+//Done: Top rated views are sometimes messed-up - Better but not perfect
 //DONE: append us localization to moviedb api - Decided not to as I don't see how...
 //Done: Change movie URI so that we use WHERE instead of sort order
 //Done: Reviews table, create it
 //Done: Create new Asynctask for review. Fetch and JSON Parsing
 //// DONE: 8/29/2016 trailerButton view duplicates after trailer intent launches
 //// DONE: 8/30/2016 Is top rated pulling trailers and reveiws? - Yes
-// TODO: 8/30/2016 Favorites>Details>Poster,etc. 
+// TODO: 8/30/2016 Favorites>Details>Poster,etc.
+// TODO: 9/7/2016 move fragments to their own file
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();

@@ -22,7 +22,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-//TODO: When onCreate is called and database already exists why does it not crash...
+//DONE: When onCreate is called and database already exists why does it not crash... - I think that it creates a new one.
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -65,13 +66,16 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 //                MovieContract.ReviewEntry.COLUMN_COMMENT_ID + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL " +
                 ");";
 
-//        TODO:I think that these are not working if already exist.
+//        DONE:I think that these are not working if already exist. - I think they are
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_FAVORITE_TABLE);
         db.execSQL(SQL_CREATE_REVIEW_TABLE);
         db.execSQL(SQL_CREATE_TRAILER_TABLE);
     }
 }
+
+
+
 
 
 

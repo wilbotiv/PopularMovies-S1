@@ -68,7 +68,7 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
                 trailerValues.put(MovieContract.TrailerEntry.COLUMN_NAME, name);
                 trailerValues.put(MovieContract.TrailerEntry.COLUMN_SOURCE, source);
                 trailerValues.put(MovieContract.TrailerEntry.COLUMN_MOVIE_ID, id);
-//                trailerValues.put(MovieContract.ReviewEntry.COLUMN_COMMENT_ID, commentID);
+//                trailerValues.put(com.example.wilbotiv.popularmoviess1.MovieContract.ReviewEntry.COLUMN_COMMENT_ID, commentID);
 
                 cVVector.add(trailerValues);
             }
@@ -79,7 +79,7 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
             // "I think not instead do this I used ContentResolver.delete() to delete the records in table.
             // I had a ContentProvider implemented so it made sense to use this."
 
-//            mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
+//            mContext.getContentResolver().delete(com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.CONTENT_URI, null, null);
 
             // add to database
             if (cVVector.size() > 0) {

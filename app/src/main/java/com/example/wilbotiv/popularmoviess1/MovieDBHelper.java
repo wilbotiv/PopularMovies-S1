@@ -63,7 +63,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
                 MovieContract.TrailerEntry.COLUMN_NAME+ " TEXT NOT NULL, " +
                 MovieContract.TrailerEntry.COLUMN_SOURCE+ " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL " +
-//                MovieContract.ReviewEntry.COLUMN_COMMENT_ID + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL " +
+//                com.example.wilbotiv.popularmoviess1.MovieContract.ReviewEntry.COLUMN_COMMENT_ID + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL " +
                 ");";
 
 //        DONE:I think that these are not working if already exist. - I think they are

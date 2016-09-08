@@ -1,19 +1,14 @@
 package com.example.wilbotiv.popularmoviess1;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 public class MoviesAdapter extends CursorAdapter {
     private static final String LOG_TAG = MoviesAdapter.class.getSimpleName();
@@ -35,7 +30,7 @@ public class MoviesAdapter extends CursorAdapter {
 //        TextView tvoriginalTitle = (TextView)view.findViewById(R.id.grid_item_original_title);
         ImageView IVposterPath = (ImageView) view.findViewById(R.id.grid_item_movie_image);
 
-//        int originalTitle = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINALTITLE);
+//        int originalTitle = cursor.getColumnIndex(com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.COLUMN_ORIGINALTITLE);
         int posterPath = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTERPATH);
         String path = cursor.getString(posterPath);
 

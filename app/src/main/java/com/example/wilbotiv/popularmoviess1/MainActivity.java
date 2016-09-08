@@ -31,7 +31,7 @@ import com.facebook.stetho.Stetho;
 //// DONE: 8/29/2016 trailerButton view duplicates after trailer intent launches
 //// DONE: 8/30/2016 Is top rated pulling trailers and reveiws? - Yes
 // TODO: 8/30/2016 Favorites>Details>Poster,etc.
-// TODO: 9/7/2016 move fragments to their own file
+// Done: 9/7/2016 move fragments to their own file
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();

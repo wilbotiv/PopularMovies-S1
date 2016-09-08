@@ -39,7 +39,7 @@ public class MovieContentProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW);
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW_DETAIL);
         matcher.addURI(authority, MovieContract.PATH_TRAILERS, TRAILER);
-//        matcher.addURI(authority, MovieContract.PATH_REVIEWS + "/#", REVIEW_DETAIL);
+//        matcher.addURI(authority, com.example.wilbotiv.popularmoviess1.MovieContract.PATH_REVIEWS + "/#", REVIEW_DETAIL);
         return matcher;
     }
 

@@ -35,6 +35,10 @@ import com.facebook.stetho.Stetho;
 
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String DETAILS_FRAGMENT_TAG = "DFTAG";
+    private boolean mTwoPane;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreate() called");
@@ -62,11 +66,24 @@ public class MainActivity extends ActionBarActivity {
         Stetho.initialize(initializer);
 
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new MoviesFragment())
-                    .commit();
+
+        // TODO: 9/13/2016 should this say fragment_details
+        if (findViewById(R.id.fragment_details) != null) {
+            mTwoPane = true;
+
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_details, new DetailFragment(), DETAILS_FRAGMENT_TAG)
+                        .commit();
+            }
+
+        }else {
+            mTwoPane = false;
         }
+
+
+
+
         //TODO: Do I need to do this?
         PreferenceManager.setDefaultValues(this, R.xml.prefs_general, false);
 
@@ -82,6 +99,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         Log.v(LOG_TAG, "onResume() called");
+        DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_details);
     }
 
     @Override

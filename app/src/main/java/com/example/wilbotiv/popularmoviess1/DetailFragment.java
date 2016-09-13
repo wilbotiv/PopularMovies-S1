@@ -162,7 +162,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.v(LOG_TAG, "In onCreateLoader");
         Intent intent = getActivity().getIntent();
         String intentExtra = intent.getStringExtra(INTENT_KEY);
-        if (intent == null) {
+        if (intent == null || intent.getData() == null ) {
+//        if (intent == null ) {
             return null;
         }
         int loaderID = id;

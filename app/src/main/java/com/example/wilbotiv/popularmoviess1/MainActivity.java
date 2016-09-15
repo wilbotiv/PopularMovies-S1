@@ -19,8 +19,8 @@ import com.facebook.stetho.Stetho;
 //Done: Modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
 //TODO: Lastly, you’ll optimize your app experience for tablet.
 //Done: Add Release Date to Details Fragment
-//TODO: If no poster path or overview from movieDB included, then handle it...
-//Doone: movieTable keeps growing.... fetch called too often.
+//Done: If no poster path or overview from movieDB included, then handle it...
+//Done: movieTable keeps growing.... fetch called too often.
 //Done: TOAST in Favorite to SAY "You added x to Favoites"....
 //DONE: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
 //Done: Top rated views are sometimes messed-up - Better but not perfect
@@ -43,31 +43,26 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
-//        Stetho.initializeWithDefaults(this);
 
         // Create an InitializerBuilder
         Stetho.InitializerBuilder initializerBuilder =
                 Stetho.newInitializerBuilder(this);
-
-// Enable Chrome DevTools
+        // Enable Chrome DevTools
         initializerBuilder.enableWebKitInspector(
                 Stetho.defaultInspectorModulesProvider(this)
         );
-
-// Enable command line interface
+        // Enable command line interface
         initializerBuilder.enableDumpapp(
                 Stetho.defaultDumperPluginsProvider(this)
         );
-
-// Use the InitializerBuilder to generate an Initializer
+        // Use the InitializerBuilder to generate an Initializer
         Stetho.Initializer initializer = initializerBuilder.build();
-
-// Initialize Stetho with the Initializer
+        // Initialize Stetho with the Initializer
         Stetho.initialize(initializer);
 
         setContentView(R.layout.activity_main);
 
-        // TODO: 9/13/2016 should this say fragment_details
+        // DONE: 9/13/2016 should this say fragment_details
         if (findViewById(R.id.fragment_details) != null) {
             mTwoPane = true;
 
@@ -76,12 +71,9 @@ public class MainActivity extends ActionBarActivity {
                         .replace(R.id.fragment_details, new DetailFragment(), DETAILS_FRAGMENT_TAG)
                         .commit();
             }
-
-        }else {
+        } else {
             mTwoPane = false;
         }
-
-
 
 
         //TODO: Do I need to do this?
@@ -99,25 +91,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         Log.v(LOG_TAG, "onResume() called");
+        // TODO: 9/14/2016 Do I need to do this?
         DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_details);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.v(LOG_TAG, "onStop() called");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.v(LOG_TAG, "onDestroy() called");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.v(LOG_TAG, "onStart() called");
     }
 
     @Override

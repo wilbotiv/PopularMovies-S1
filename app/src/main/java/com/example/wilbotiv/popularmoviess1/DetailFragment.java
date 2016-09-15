@@ -341,7 +341,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         String intentExtra = intent.getStringExtra(INTENT_KEY);
         FetchReviewTask fetchReviewTask = new FetchReviewTask(getContext());
         Log.v(LOG_TAG, "In updateMovieReview");
-        fetchReviewTask.execute(intentExtra);
+
+        if (intent == null || intentExtra == null) {
+            return;
+        } else {
+            fetchReviewTask.execute(intentExtra);
+        }
     }
 
     private void updateMovieTrailer() {
@@ -349,7 +354,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         String intentExtra = intent.getStringExtra(INTENT_KEY);
         FetchTrailerTask fetchTrailerTask = new FetchTrailerTask(getContext());
         Log.v(LOG_TAG, "In updateMovieTrailer");
-        fetchTrailerTask.execute(intentExtra);
+
+        if (intent == null || intentExtra == null) {
+            return;
+        } else {
+            fetchTrailerTask.execute(intentExtra);
+        }
+
+//        fetchTrailerTask.execute(intentExtra);
     }
 
     @Override

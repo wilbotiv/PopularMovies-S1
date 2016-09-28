@@ -33,6 +33,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     static final String DETAIL_URI = "URI";
     private Uri mUri;
+    private String mMovieID;
+
 
     private static final int DETAIL_LOADER_HEADER = 0;
     private static final int DETAIL_LOADER_REVIEWS = 1;
@@ -108,6 +110,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+            mMovieID = mUri.getLastPathSegment();
+
+//            mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/333484");
         }
 
 
@@ -181,11 +186,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 Log.v(LOG_TAG, "In onCreateLoader case 0");
                 return new CursorLoader(
                         getActivity(),
-                        mUri,
+                        MovieContract.MovieEntry.CONTENT_URI,
 //                        intent.getData(),
-//                        MOVIE_COLUMNS,
-                        null,
-                        null,
+                        MOVIE_COLUMNS,
+//                        null,
+                        MovieContract.MovieEntry.COLUMN_MOVIE_ID + " =" + mMovieID,
                         null,
                         null
                 );
@@ -198,7 +203,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         getActivity(),
                         MovieContract.ReviewEntry.CONTENT_URI,
                         REVIEWS_COLUMNS,
-                        MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " =" + "271110",
+                        MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " =" + mMovieID,
                         null,
                         null
                 );
@@ -211,7 +216,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         getActivity(),
                         MovieContract.TrailerEntry.CONTENT_URI,
                         TRAILER_COLUMNS,
-                        MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " =" + "271110",
+                        MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " =" + mMovieID,
                         null,
                         null
                 );

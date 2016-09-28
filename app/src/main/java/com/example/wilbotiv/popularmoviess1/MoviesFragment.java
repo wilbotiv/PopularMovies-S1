@@ -43,6 +43,14 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public MoviesFragment() {
     }
 
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri movieUri);
+    }
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -92,10 +100,14 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                 String movieID = cursor.getString(COL_MOVIE_ID);
                 if (cursor != null) {
 //                  TODO: setData will need to be changed here to support Favorites detail view....
-                    Intent intent = new Intent(getActivity(), DetailActivity.class)
-                            .setData(MovieContract.MovieEntry.buildMovieUri(id));
-                    intent.putExtra(INTENT_KEY, movieID);
-                    startActivity(intent);
+                    // TODO: 9/22/2016 change the uri
+                    ((Callback) getActivity()).onItemSelected(MovieContract.MovieEntry.buildMovieUri(Integer.parseInt(movieID)));
+
+//                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+//                            .setData(MovieContract.MovieEntry.buildMovieUri(id));
+//                    intent.putExtra(INTENT_KEY, movieID);
+//                    startActivity(intent);
+
                 }
 
                 /*Intent intent = new Intent(getActivity(), DetailActivity.class);

@@ -1,6 +1,7 @@
 package com.example.wilbotiv.popularmoviess1;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -33,9 +34,10 @@ import com.facebook.stetho.Stetho;
 // TODO: 8/30/2016 Favorites>Details>Poster,etc.
 // Done: 9/7/2016 move fragments to their own file
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements MoviesFragment.Callback {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILS_FRAGMENT_TAG = "DFTAG";
+
     private boolean mTwoPane;
 
 
@@ -63,12 +65,12 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         // DONE: 9/13/2016 should this say fragment_details
-        if (findViewById(R.id.fragment_details) != null) {
+        if (findViewById(R.id.detail_container) != null) {
             mTwoPane = true;
 
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_details, new DetailFragment(), DETAILS_FRAGMENT_TAG)
+                        .replace(R.id.detail_container, new DetailFragment(), DETAILS_FRAGMENT_TAG)
                         .commit();
             }
         } else {
@@ -81,19 +83,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.v(LOG_TAG, "onPause() called");
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.v(LOG_TAG, "onResume() called");
-        // TODO: 9/14/2016 Do I need to do this?
-        DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_details);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,5 +107,35 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(LOG_TAG, "onResume() called");
+        // TODO: 9/14/2016 Do I need to do this?
+        DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILS_FRAGMENT_TAG);
+    }
+
+    @Override
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, contentUri);
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_container, fragment, DETAILS_FRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .setData(contentUri);
+            startActivity(intent);
+        }
     }
 }

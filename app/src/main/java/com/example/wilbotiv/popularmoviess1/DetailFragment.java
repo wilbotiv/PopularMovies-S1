@@ -31,6 +31,9 @@ import com.squareup.picasso.Picasso;
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    static final String DETAIL_URI = "URI";
+    private Uri mUri;
+
     private static final int DETAIL_LOADER_HEADER = 0;
     private static final int DETAIL_LOADER_REVIEWS = 1;
     private static final int DETAIL_LOADER_TRAILERS = 2;
@@ -102,6 +105,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+        }
+
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Button button = (Button) rootView.findViewById(R.id.fragment_detail_button);
@@ -160,12 +168,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.v(LOG_TAG, "In onCreateLoader");
-        Intent intent = getActivity().getIntent();
-        String intentExtra = intent.getStringExtra(INTENT_KEY);
-        if (intent == null || intent.getData() == null ) {
+//        Intent intent = getActivity().getIntent();
+//        String intentExtra = intent.getStringExtra(INTENT_KEY);
+//        if (intent == null || intent.getData() == null ) {
 //        if (intent == null ) {
-            return null;
-        }
+//            return null;
+//        }
         int loaderID = id;
 
         switch (loaderID) {
@@ -173,8 +181,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 Log.v(LOG_TAG, "In onCreateLoader case 0");
                 return new CursorLoader(
                         getActivity(),
-                        intent.getData(),
-                        MOVIE_COLUMNS,
+                        mUri,
+//                        intent.getData(),
+//                        MOVIE_COLUMNS,
+                        null,
                         null,
                         null,
                         null
@@ -183,12 +193,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             case 1:
 //                    DONE: You cant use movieID, because it may be null. Get movieID from intent?
                 Log.v(LOG_TAG, "In onCreateLoader case 1");
-                Log.v(LOG_TAG, "At intent extra " + intentExtra);
+//                Log.v(LOG_TAG, "At intent extra " + intentExtra);
                 return new CursorLoader(
                         getActivity(),
                         MovieContract.ReviewEntry.CONTENT_URI,
                         REVIEWS_COLUMNS,
-                        MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " =" + intentExtra,
+                        MovieContract.ReviewEntry.COLUMN_MOVIE_ID + " =" + "271110",
                         null,
                         null
                 );
@@ -196,12 +206,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             case 2:
 //                    DONE: You cant use movieID, because it may be null. Get movieID from intent?
                 Log.v(LOG_TAG, "In onCreateLoader case 2");
-                Log.v(LOG_TAG, "At intent extra " + intentExtra);
+//                Log.v(LOG_TAG, "At intent extra " + intentExtra);
                 return new CursorLoader(
                         getActivity(),
                         MovieContract.TrailerEntry.CONTENT_URI,
                         TRAILER_COLUMNS,
-                        MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " =" + intentExtra,
+                        MovieContract.TrailerEntry.COLUMN_MOVIE_ID + " =" + "271110",
                         null,
                         null
                 );

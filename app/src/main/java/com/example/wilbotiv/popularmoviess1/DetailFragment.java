@@ -4,9 +4,11 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -34,6 +36,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     static final String DETAIL_URI = "URI";
     private Uri mUri;
     private String mMovieID;
+    private String mSource;
 
 
     private static final int DETAIL_LOADER_HEADER = 0;
@@ -157,7 +160,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
         //FIXED: Add Original Title here.
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
+//        shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + mSource);
         return shareIntent;
     }
 
@@ -183,10 +187,21 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         switch (loaderID) {
             case 0:
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String sortOrder = sharedPreferences.getString("sort_order", "0");
+                int sortOrderValueToInt = Integer.parseInt(sortOrder);
+                Uri loaderUri;
+                if (sortOrderValueToInt == 0 || sortOrderValueToInt == 1) {
+                    loaderUri = MovieContract.MovieEntry.CONTENT_URI;
+                } else {
+                    loaderUri = MovieContract.FavoriteEntry.CONTENT_URI;
+                }
+
                 Log.v(LOG_TAG, "In onCreateLoader case 0");
                 return new CursorLoader(
                         getActivity(),
-                        MovieContract.MovieEntry.CONTENT_URI,
+                        loaderUri,
+//                        MovieContract.MovieEntry.CONTENT_URI,
 //                        intent.getData(),
                         MOVIE_COLUMNS,
 //                        null,
@@ -312,9 +327,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
                 for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
                     final String name = data.getString(COL_NAME);
-                    final String source = data.getString(COL_SOURCE);
+                    mSource = data.getString(COL_SOURCE);
 
-                    Log.v(LOG_TAG, "In onLoadFinished case 2 " + name + " " + source);
+                    Log.v(LOG_TAG, "In onLoadFinished case 2 " + name + " " + mSource);
 
                     Button trailerButton = new Button(getContext());
 //                        TextView textViewTrailerName = new TextView(getContext());
@@ -330,7 +345,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         public void onClick(View v) {
                             Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
                             Log.v(LOG_TAG, "In on click");
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + source)));
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mSource)));
                         }
                     });
 

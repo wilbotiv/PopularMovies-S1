@@ -33,6 +33,7 @@ import com.facebook.stetho.Stetho;
 //// DONE: 8/30/2016 Is top rated pulling trailers and reveiws? - Yes
 // TODO: 8/30/2016 Favorites>Details>Poster,etc.
 // Done: 9/7/2016 move fragments to their own file
+// TODO: 9/29/2016 Movie Details View includes an Action Bar item that allows the user to share the first trailer video URL from the list of trailers
 
 public class MainActivity extends ActionBarActivity implements MoviesFragment.Callback {
     private final String LOG_TAG = MainActivity.class.getSimpleName();

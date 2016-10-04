@@ -35,6 +35,7 @@ public class MovieContentProvider extends ContentProvider {
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, MovieContract.PATH_MOVIE, MOVIE);
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/*", MOVIE_DETAIL);
+        matcher.addURI(authority, MovieContract.PATH_MOVIE + "/*", MOVIE_DETAIL);
         matcher.addURI(authority, MovieContract.PATH_FAVORITE, FAVORITE);
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW);
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW_DETAIL);

@@ -44,7 +44,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static final int DETAIL_LOADER_TRAILERS = 2;
 
 
-    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
+    private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMoviesS1";
     private ShareActionProvider mShareActionProvider;
     //FIXED: mMovie needs to have originalTitle
@@ -113,7 +113,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
-
+//            if (mUri == null) {
+//                mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/333484");
+//            }
             mMovieID = mUri.getLastPathSegment();
 
 //            mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/333484");
@@ -184,6 +186,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 //        if (intent == null ) {
 //            return null;
 //        }
+
+        if (mUri == null) {
+            mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/271110");
+        }
+        mMovieID = mUri.getLastPathSegment();
+
+
         int loaderID = id;
 
         switch (loaderID) {
@@ -340,7 +349,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
                             Log.v(LOG_TAG, "In on click");
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mSource)));
                         }
@@ -372,7 +381,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 //        if (intent == null || intentExtra == null) {
 //            return;
 //        } else {
-            fetchReviewTask.execute(mMovieID);
+        fetchReviewTask.execute(mMovieID);
 //        }
     }
 
@@ -385,7 +394,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 //        if (intent == null || intentExtra == null) {
 //            return;
 //        } else {
-            fetchTrailerTask.execute(mMovieID);
+        fetchTrailerTask.execute(mMovieID);
 //        }
 
 //        fetchTrailerTask.execute(intentExtra);

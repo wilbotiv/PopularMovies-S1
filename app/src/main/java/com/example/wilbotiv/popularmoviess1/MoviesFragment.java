@@ -99,8 +99,8 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                 int id = cursor.getInt(COL_ID);
                 String movieID = cursor.getString(COL_MOVIE_ID);
                 if (cursor != null) {
-//                  TODO: setData will need to be changed here to support Favorites detail view....
-                    // TODO: 9/22/2016 change the uri
+//                  DONE: setData will need to be changed here to support Favorites detail view....
+                    // DONE: 9/22/2016 change the uri
                     ((Callback) getActivity()).onItemSelected(MovieContract.MovieEntry.buildMovieUri(Integer.parseInt(movieID)));
 
 //                    Intent intent = new Intent(getActivity(), DetailActivity.class)
@@ -134,7 +134,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onStart() {
         super.onStart();
-//        TODO: Check Sunshine, when does it fetch...
+//        DONE: Check Sunshine, when does it fetch...
         updateMovie();
     }
 
@@ -158,7 +158,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         int sortOrderValueToInt = Integer.parseInt(sortOrder);
         Uri movie = null;
         String sort = null;
-//        TODO: change sortOrder field to 1 or 0 instead of string vote_average.desc
+//        DONE: change sortOrder field to 1 or 0 instead of string vote_average.desc
         String selection = null;
         if (sortOrderValueToInt == 0) {
             movie = MovieContract.MovieEntry.CONTENT_URI;

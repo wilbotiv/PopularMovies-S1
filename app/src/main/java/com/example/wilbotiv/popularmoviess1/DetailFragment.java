@@ -113,6 +113,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+
             mMovieID = mUri.getLastPathSegment();
 
 //            mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/333484");
@@ -196,15 +197,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 } else {
                     loaderUri = MovieContract.FavoriteEntry.CONTENT_URI;
                 }
-
                 Log.v(LOG_TAG, "In onCreateLoader case 0");
                 return new CursorLoader(
                         getActivity(),
                         loaderUri,
-//                        MovieContract.MovieEntry.CONTENT_URI,
-//                        intent.getData(),
                         MOVIE_COLUMNS,
-//                        null,
                         MovieContract.MovieEntry.COLUMN_MOVIE_ID + " =" + mMovieID,
                         null,
                         null

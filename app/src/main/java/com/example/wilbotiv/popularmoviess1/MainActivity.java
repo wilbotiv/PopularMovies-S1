@@ -31,10 +31,10 @@ import com.facebook.stetho.Stetho;
 //Done: Create new Asynctask for review. Fetch and JSON Parsing
 //// DONE: 8/29/2016 trailerButton view duplicates after trailer intent launches
 //// DONE: 8/30/2016 Is top rated pulling trailers and reveiws? - Yes
-// TODO: 8/30/2016 Favorites>Details>Poster,etc.
+// Done: 8/30/2016 Favorites>Details>Poster,etc.
 // Done: 9/7/2016 move fragments to their own file
-// TODO: 9/29/2016 Movie Details View includes an Action Bar item that allows the user to share the first trailer video URL from the list of trailers
-
+// Done: 9/29/2016 Movie Details View includes an Action Bar item that allows the user to share the first trailer video URL from the list of trailers
+// TODO: 9/29/2016 In Master-Detail layout fix so that if nothing is selected first movie is shown in Detail fragment
 public class MainActivity extends ActionBarActivity implements MoviesFragment.Callback {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILS_FRAGMENT_TAG = "DFTAG";
@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity implements MoviesFragment.Ca
         }
 
 
-        //TODO: Do I need to do this?
+        //Done: Do I need to do this?
         PreferenceManager.setDefaultValues(this, R.xml.prefs_general, false);
 
     }

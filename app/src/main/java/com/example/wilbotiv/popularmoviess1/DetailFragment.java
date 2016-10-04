@@ -187,10 +187,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 //            return null;
 //        }
 
-        if (mUri == null) {
-            mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/271110");
-        }
-        mMovieID = mUri.getLastPathSegment();
+//        if (mUri == null) {
+//            mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/271110");
+//        }
+//        mMovieID = mUri.getLastPathSegment();
 
 
         int loaderID = id;

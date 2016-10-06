@@ -1,4 +1,4 @@
-package com.example.wilbotiv.popularmoviess1;
+package com.example.wilbotiv.popularmoviess1.db;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -40,7 +40,7 @@ public class MovieContentProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW);
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW_DETAIL);
         matcher.addURI(authority, MovieContract.PATH_TRAILERS, TRAILER);
-//        matcher.addURI(authority, com.example.wilbotiv.popularmoviess1.MovieContract.PATH_REVIEWS + "/#", REVIEW_DETAIL);
+//        matcher.addURI(authority, com.example.wilbotiv.popularmoviess1.db.MovieContract.PATH_REVIEWS + "/#", REVIEW_DETAIL);
         return matcher;
     }
 

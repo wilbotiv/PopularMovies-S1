@@ -1,6 +1,5 @@
-package com.example.wilbotiv.popularmoviess1;
+package com.example.wilbotiv.popularmoviess1.fragments;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,6 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
+import com.example.wilbotiv.popularmoviess1.fetches.FetchMovieTask;
+import com.example.wilbotiv.popularmoviess1.db.MovieContract;
+import com.example.wilbotiv.popularmoviess1.adapters.MoviesAdapter;
+import com.example.wilbotiv.popularmoviess1.R;
 
 public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -162,30 +166,30 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         String selection = null;
         if (sortOrderValueToInt == 0) {
             movie = MovieContract.MovieEntry.CONTENT_URI;
-//            sort = com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "ASC";
+//            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "ASC";
             selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'popularity.desc'";
         } else if (sortOrderValueToInt == 1) {
             movie = MovieContract.MovieEntry.CONTENT_URI;
-//            sort = com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "DESC";
+//            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "DESC";
             selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'vote_average.desc'";
         } else if (sortOrderValueToInt == 2) {
             movie = MovieContract.FavoriteEntry.CONTENT_URI;
-//            sort = com.example.wilbotiv.popularmoviess1.MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " " + "ASC";
+//            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " " + "ASC";
         }
 //        Need to read pref file then if else if a URI.. Girls back from ballet need to get dinner ready....
 
 //What if changed sortOrder to int then switch to one of three different loaders, branch first...
         switch (id) {
             case MOVIE_LOADER:
-//                Uri movie = com.example.wilbotiv.popularmoviess1.MovieContract.FavoriteEntry.CONTENT_URI;
-//                        movie = com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.CONTENT_URI;
+//                Uri movie = com.example.wilbotiv.popularmoviess1.db.MovieContract.FavoriteEntry.CONTENT_URI;
+//                        movie = com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.CONTENT_URI;
                 return new CursorLoader(getActivity(),
                         movie,
                         movieColumns,
                         selection,
                         null,
                         null);
-//                        com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
+//                        com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
 
 //FIXED: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
 //                return new CursorLoader(getActivity(), movie, null, null, null, null);

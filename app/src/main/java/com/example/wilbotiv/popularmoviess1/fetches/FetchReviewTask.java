@@ -1,10 +1,13 @@
-package com.example.wilbotiv.popularmoviess1;
+package com.example.wilbotiv.popularmoviess1.fetches;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.wilbotiv.popularmoviess1.BuildConfig;
+import com.example.wilbotiv.popularmoviess1.db.MovieContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,73 +26,70 @@ import java.util.Vector;
  */
 
 
-public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
-    private final String LOG_TAG = FetchTrailerTask.class.getSimpleName();
+public class FetchReviewTask extends AsyncTask<String, Void, Void> {
+    private final String LOG_TAG = FetchReviewTask.class.getSimpleName();
 
     private final Context mContext;
 
-    public FetchTrailerTask(Context context) {
+    public FetchReviewTask(Context context) {
         mContext = context;
     }
 
 
-    private void getTrailerDataFromJson(String moviesJsonStr) throws JSONException {
+    private void getReviewDataFromJson(String moviesJsonStr) throws JSONException {
 
-//        final String RESULTS = "results";
+        final String RESULTS = "results";
         final String MOVIE_ID = "id";
-        final String YOUTUBE = "youtube";
-        final String NAME = "name";
-        final String SOURCE = "source";
-//        final String AUTHOR = "author";
-//        final String CONTENT = "content";
-//        final String COMMENT_ID = "id";
+        final String AUTHOR = "author";
+        final String CONTENT = "content";
+        final String COMMENT_ID = "id";
 
         try {
             JSONObject jsonObject = new JSONObject(moviesJsonStr);
             String id = jsonObject.getString(MOVIE_ID);
-            JSONArray trailerArray = jsonObject.getJSONArray(YOUTUBE);
+            JSONArray movieArray = jsonObject.getJSONArray(RESULTS);
 
-            Vector<ContentValues> cVVector = new Vector<ContentValues>(trailerArray.length());
+            Vector<ContentValues> cVVector = new Vector<ContentValues>(movieArray.length());
 
-            for (int i = 0; i < trailerArray.length(); i++) {
+            for (int i = 0; i < movieArray.length(); i++) {
 
-                String name;
-                String source;
-//                String commentID;
+                String author;
+                String content;
+                String commentID;
 
-                JSONObject result = trailerArray.getJSONObject(i);
+                JSONObject result = movieArray.getJSONObject(i);
 
-                name = result.getString(NAME);
-                source = result.getString(SOURCE);
-//                commentID = result.getString(COMMENT_ID);
+                author = result.getString(AUTHOR);
+                content = result.getString(CONTENT);
+                commentID = result.getString(COMMENT_ID);
 
-                ContentValues trailerValues = new ContentValues();
+                ContentValues movieValues = new ContentValues();
 
-                trailerValues.put(MovieContract.TrailerEntry.COLUMN_NAME, name);
-                trailerValues.put(MovieContract.TrailerEntry.COLUMN_SOURCE, source);
-                trailerValues.put(MovieContract.TrailerEntry.COLUMN_MOVIE_ID, id);
-//                trailerValues.put(com.example.wilbotiv.popularmoviess1.MovieContract.ReviewEntry.COLUMN_COMMENT_ID, commentID);
+                movieValues.put(MovieContract.ReviewEntry.COLUMN_AUTHOR, author);
+                movieValues.put(MovieContract.ReviewEntry.COLUMN_CONTENT, content);
+                movieValues.put(MovieContract.ReviewEntry.COLUMN_MOVIE_ID, id);
+                movieValues.put(MovieContract.ReviewEntry.COLUMN_COMMENT_ID, commentID);
 
-                cVVector.add(trailerValues);
+                cVVector.add(movieValues);
             }
 
             int inserted = 0;
 
-            //Done: Delete all rows in table before fetch? - Don't think that this is really necessary.
+            //Done: Delete all rows in table before fetch? - Don't think that this is necessary.
             // "I think not instead do this I used ContentResolver.delete() to delete the records in table.
             // I had a ContentProvider implemented so it made sense to use this."
 
-//            mContext.getContentResolver().delete(com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.CONTENT_URI, null, null);
+//            mContext.getContentResolver().delete(com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.CONTENT_URI, null, null);
 
             // add to database
             if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
 //              Done: Fix this.
-                inserted = mContext.getContentResolver().bulkInsert(MovieContract.TrailerEntry.CONTENT_URI, cvArray);
+                inserted = mContext.getContentResolver().bulkInsert(MovieContract.ReviewEntry.CONTENT_URI, cvArray);
             }
 
-            Log.d(LOG_TAG, "FetchTrailerTask Complete. " + inserted + " Inserted");
+            Log.d(LOG_TAG, "FetchReviewTask Complete. " + inserted + " Inserted");
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                         .appendPath(movieID[0])
-                        .appendPath("trailers")
+                        .appendPath("reviews")
                         .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
                 Log.v(LOG_TAG, builtUri.toString());
@@ -146,7 +146,7 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
                 }
                 reviewsJsonStr = buffer.toString();
                 Log.v(LOG_TAG, reviewsJsonStr);
-                getTrailerDataFromJson(reviewsJsonStr);
+                getReviewDataFromJson(reviewsJsonStr);
             } catch (IOException e) {
                 Log.e("MoviesFragment", "Error ", e);
                 return null;

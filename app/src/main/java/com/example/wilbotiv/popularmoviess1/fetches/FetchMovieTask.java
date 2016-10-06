@@ -1,10 +1,13 @@
-package com.example.wilbotiv.popularmoviess1;
+package com.example.wilbotiv.popularmoviess1.fetches;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.wilbotiv.popularmoviess1.BuildConfig;
+import com.example.wilbotiv.popularmoviess1.db.MovieContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,7 +106,7 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
             // "I think not instead do this I used ContentResolver.delete() to delete the records in table.
             // I had a ContentProvider implemented so it made sense to use this."
 
-//            mContext.getContentResolver().delete(com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.CONTENT_URI, null, null);
+//            mContext.getContentResolver().delete(com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.CONTENT_URI, null, null);
 
             // add to database
             if (cVVector.size() > 0) {
@@ -118,7 +121,7 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
 //                    locationSetting, System.currentTimeMillis());
 
             // Students: Uncomment the next lines to display what what you stored in the bulkInsert
-            /*Cursor cur = mContext.getContentResolver().query(com.example.wilbotiv.popularmoviess1.MovieContract.MovieEntry.CONTENT_URI,
+            /*Cursor cur = mContext.getContentResolver().query(com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.CONTENT_URI,
                     null, null, null, null);
 
             cVVector = new Vector<ContentValues>(cur.getCount());

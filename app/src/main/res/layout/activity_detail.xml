@@ -3,6 +3,6 @@
              android:id="@+id/detail_container"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.example.wilbotiv.popularmoviess1.DetailActivity"
+             tools:context=".activities.DetailActivity"
              tools:ignore="MergeRootFrame">
 </FrameLayout>

@@ -1,4 +1,4 @@
-package com.example.wilbotiv.popularmoviess1;
+package com.example.wilbotiv.popularmoviess1.db;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

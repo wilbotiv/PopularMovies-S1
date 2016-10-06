@@ -1,4 +1,4 @@
-package com.example.wilbotiv.popularmoviess1;
+package com.example.wilbotiv.popularmoviess1.fragments;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -29,11 +29,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wilbotiv.popularmoviess1.fetches.FetchReviewTask;
+import com.example.wilbotiv.popularmoviess1.fetches.FetchTrailerTask;
+import com.example.wilbotiv.popularmoviess1.db.MovieContract;
+import com.example.wilbotiv.popularmoviess1.R;
 import com.squareup.picasso.Picasso;
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    static final String DETAIL_URI = "URI";
+    public static final String DETAIL_URI = "URI";
     private Uri mUri;
     private String mMovieID;
     private String mSource;

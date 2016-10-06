@@ -1,4 +1,4 @@
-package com.example.wilbotiv.popularmoviess1;
+package com.example.wilbotiv.popularmoviess1.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.wilbotiv.popularmoviess1.R;
+import com.example.wilbotiv.popularmoviess1.fragments.DetailFragment;
+import com.example.wilbotiv.popularmoviess1.fragments.MoviesFragment;
 import com.facebook.stetho.Stetho;
 
 //DONE: INSTALL - Stetho guide - an Android app debug tool

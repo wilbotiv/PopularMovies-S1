@@ -35,6 +35,8 @@ import com.example.wilbotiv.popularmoviess1.db.MovieContract;
 import com.example.wilbotiv.popularmoviess1.R;
 import com.squareup.picasso.Picasso;
 
+// TODO: 10/11/2016 You are performing database operations (which are POTENTIALLY lengthy operations) on the main UI thread (You can learn more about threads from the Udacity courses: Main Thread vs Background Thread). This could cause a stutter or an ANR (which is short for Application Not Responding, and usually occurs when the main thread of the application is blocked for too long). You can either put this type of operations inside of an AsyncTask or use an AsyncQueryHandler (for easier asynchronous access to Content Providers. Here is a simple tutorial that you can get started with.). Also it's better if you could show a progress indicator to the user. You can learn more about how to make your app responsive here from the Official Android Developer Website.
+// TODO: 10/11/2016 Please remove the commented out code.
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String DETAIL_URI = "URI";
@@ -117,12 +119,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
-//            if (mUri == null) {
-//                mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/333484");
-//            }
             mMovieID = mUri.getLastPathSegment();
-
-//            mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/333484");
         }
 
 
@@ -167,7 +164,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
         //FIXED: Add Original Title here.
-//        shareIntent.putExtra(Intent.EXTRA_TEXT, mMovie + MOVIE_SHARE_HASHTAG);
         shareIntent.putExtra(Intent.EXTRA_TEXT, "http://www.youtube.com/watch?v=" + mSource);
         return shareIntent;
     }
@@ -184,19 +180,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.v(LOG_TAG, "In onCreateLoader");
-//        Intent intent = getActivity().getIntent();
-//        String intentExtra = intent.getStringExtra(INTENT_KEY);
-//        if (intent == null || intent.getData() == null ) {
-//        if (intent == null ) {
-//            return null;
-//        }
-
-//        if (mUri == null) {
-//            mUri = Uri.parse("content://com.example.wilbotiv.popularmoviess1/movie/271110");
-//        }
-//        mMovieID = mUri.getLastPathSegment();
-
-
         int loaderID = id;
 
         switch (loaderID) {
@@ -223,7 +206,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             case 1:
 //                    DONE: You cant use movieID, because it may be null. Get movieID from intent?
                 Log.v(LOG_TAG, "In onCreateLoader case 1");
-//                Log.v(LOG_TAG, "At intent extra " + intentExtra);
                 return new CursorLoader(
                         getActivity(),
                         MovieContract.ReviewEntry.CONTENT_URI,
@@ -236,7 +218,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             case 2:
 //                    DONE: You cant use movieID, because it may be null. Get movieID from intent?
                 Log.v(LOG_TAG, "In onCreateLoader case 2");
-//                Log.v(LOG_TAG, "At intent extra " + intentExtra);
                 return new CursorLoader(
                         getActivity(),
                         MovieContract.TrailerEntry.CONTENT_URI,
@@ -342,7 +323,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     Log.v(LOG_TAG, "In onLoadFinished case 2 " + name + " " + mSource);
 
                     Button trailerButton = new Button(getContext());
-//                        TextView textViewTrailerName = new TextView(getContext());
 // DONE: 8/26/2016 use string resource
 
                     trailerButton.setText(name);
@@ -358,15 +338,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mSource)));
                         }
                     });
-
-//                        textViewTrailerName.setText(name);
-//                        DONE: Use r.demension instead of hard code
-//                        textViewTrailerName.setTextSize(25);
-//                        textViewTrailerName.setLayoutParams(new LinearLayout.LayoutParams(
-//                                LinearLayout.LayoutParams.MATCH_PARENT,
-//                                LinearLayout.LayoutParams.MATCH_PARENT));
-
-//                        linearLayoutTrailer.addView(textViewTrailerName);
                     linearLayoutTrailer.addView(trailerButton);
                 }
                 break;
@@ -377,37 +348,22 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void updateMovieReview() {
-        Intent intent = getActivity().getIntent();
-        String intentExtra = intent.getStringExtra(INTENT_KEY);
+//        Intent intent = getActivity().getIntent();
+//        String intentExtra = intent.getStringExtra(INTENT_KEY);
         FetchReviewTask fetchReviewTask = new FetchReviewTask(getContext());
         Log.v(LOG_TAG, "In updateMovieReview");
-
-//        if (intent == null || intentExtra == null) {
-//            return;
-//        } else {
         fetchReviewTask.execute(mMovieID);
-//        }
     }
 
     private void updateMovieTrailer() {
-        Intent intent = getActivity().getIntent();
-        String intentExtra = intent.getStringExtra(INTENT_KEY);
+//        Intent intent = getActivity().getIntent();
+//        String intentExtra = intent.getStringExtra(INTENT_KEY);
         FetchTrailerTask fetchTrailerTask = new FetchTrailerTask(getContext());
         Log.v(LOG_TAG, "In updateMovieTrailer");
-//
-//        if (intent == null || intentExtra == null) {
-//            return;
-//        } else {
         fetchTrailerTask.execute(mMovieID);
-//        }
-
-//        fetchTrailerTask.execute(intentExtra);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
     }
-
-
 }

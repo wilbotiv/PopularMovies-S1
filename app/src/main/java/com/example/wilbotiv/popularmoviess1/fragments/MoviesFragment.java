@@ -167,11 +167,11 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         if (sortOrderValueToInt == 0) {
             movie = MovieContract.MovieEntry.CONTENT_URI;
 //            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "ASC";
-            selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'popularity.desc'";
+            selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'popular'";
         } else if (sortOrderValueToInt == 1) {
             movie = MovieContract.MovieEntry.CONTENT_URI;
 //            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "DESC";
-            selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'vote_average.desc'";
+            selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'top_rated'";
         } else if (sortOrderValueToInt == 2) {
             movie = MovieContract.FavoriteEntry.CONTENT_URI;
 //            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " " + "ASC";

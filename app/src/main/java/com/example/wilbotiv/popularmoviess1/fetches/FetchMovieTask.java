@@ -25,19 +25,21 @@ import java.util.Vector;
  * Created by wilbotiv on 7/5/2016.
  */
 
+// The addLocation method in Sunshine may be worth looking in to as a guide for implementing Favorites
+// Done - Stopping here for the night. Tomorrow continue comparing PM to Sunshine fetch tasks.
+// Done - Stopping here because Isabelle is about to finish Piano Lesson. Next modify table to include sort column.
+// Done: 10/11/2016 FIX In a background thread, app queries the /movie/popular or /movie/top_rated API for the sort criteria specified in the settings menu.
+
+
 
 public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
     private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
-
     private final Context mContext;
 
     public FetchMovieTask(Context context) {
         mContext = context;
     }
-
-    // The addLocation method in Sunshine may be worth looking in to as a guide for implementing Favorites
-// Done - Stopping here for the night. Tomorrow continue comparing PM to Sunshine fetch tasks.
-//    Done - Stopping here because Isabelle is about to finish Piano Lesson. Next modify table to include sort column.
+    
 
     private void getMovieDataFromJson(String moviesJsonStr, String sortOrder) throws JSONException {
         final String RESULTS = "results";
@@ -51,9 +53,6 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
         try {
             JSONObject jsonObject = new JSONObject(moviesJsonStr);
             JSONArray movieArray = jsonObject.getJSONArray(RESULTS);
-
-//        ArrayList<Movie> movieArrayList = new ArrayList<Movie>(jsonArray.length());
-
             Vector<ContentValues> cVVector = new Vector<ContentValues>(movieArray.length());
 
             for (int i = 0; i < movieArray.length(); i++) {
@@ -65,26 +64,14 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                 String movieID;
                 String voteAverage;
 
-
                 JSONObject result = movieArray.getJSONObject(i);
-                /*Movie movie = new Movie();
-                movie.setPosterPath(result.getString(POSTER_PATH));
-                movie.setOverview(result.getString(OVERVIEW));
-                movie.setReleaseDate(result.getString(RELEASE_DATE));
-                movie.setOriginalTitle(result.getString(ORIGINAL_TITLE));
-                movie.setId(result.getString(ID));
-                movie.setVoteAverage(result.getString(VOTE_AVERAGE));
-                movieArrayList.add(movie);
-    */
+
                 posterPath = result.getString(POSTER_PATH);
                 overview = result.getString(OVERVIEW);
                 releaseDate = result.getString(RELEASE_DATE);
                 originalTitle = result.getString(ORIGINAL_TITLE);
                 movieID = result.getString(ID);
                 voteAverage = result.getString(VOTE_AVERAGE);
-
-//                FetchReviewTask fetchReviewTask = new FetchReviewTask(mContext);
-//                fetchReviewTask.execute(movieID);
 
                 ContentValues movieValues = new ContentValues();
 
@@ -102,11 +89,9 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
 
             int inserted = 0;
 
-            //Done: Delete all rows in table before fetch? - Did this in updateMovie() method
-            // "I think not instead do this I used ContentResolver.delete() to delete the records in table.
-            // I had a ContentProvider implemented so it made sense to use this."
-
-//            mContext.getContentResolver().delete(com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.CONTENT_URI, null, null);
+//Done: Delete all rows in table before fetch? - Did this in updateMovie() method
+// "I think not instead do this I used ContentResolver.delete() to delete the records in table.
+// I had a ContentProvider implemented so it made sense to use this."
 
             // add to database
             if (cVVector.size() > 0) {
@@ -115,47 +100,12 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
             }
 
-            // Sort order:  Ascending, by date.
-//            String sortOrder = WeatherEntry.COLUMN_DATE + " ASC";
-//            Uri weatherForLocationUri = WeatherEntry.buildWeatherLocationWithStartDate(
-//                    locationSetting, System.currentTimeMillis());
-
-            // Students: Uncomment the next lines to display what what you stored in the bulkInsert
-            /*Cursor cur = mContext.getContentResolver().query(com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.CONTENT_URI,
-                    null, null, null, null);
-
-            cVVector = new Vector<ContentValues>(cur.getCount());
-            if ( cur.moveToFirst() ) {
-                do {
-                    ContentValues cv = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(cur, cv);
-                    cVVector.add(cv);
-                } while (cur.moveToNext());
-            }
-*/
             Log.d(LOG_TAG, "FetchMovieTask Complete. " + inserted + " Inserted");
-
-//            String[] resultStrs = convertContentValuesToUXFormat(cVVector);
-//            return null;
-
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
-
-
-//        for (Movie m : movieArrayList) {
-//            Log.v(LOG_TAG, POSTER_PATH + ": " + m.getPosterPath());
-//            Log.v(LOG_TAG, OVERVIEW + ": " + m.getOverview());
-//            Log.v(LOG_TAG, RELEASE_DATE + ": " + m.getReleaseDate());
-//            Log.v(LOG_TAG, ORIGINAL_TITLE + ": " + m.getOriginalTitle());
-//            Log.v(LOG_TAG, ID + ": " + m.getId());
-//            Log.v(LOG_TAG, VOTE_AVERAGE + ": " + m.getVoteAverage());
-//        }
-//        return movieArrayList;
-//        This should return a String[]
-//        return null;
     }
 
     @Override
@@ -172,23 +122,19 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
 
         for (int i = 0; i < 2; i++) {
             if (i == 0) {
-                sortOrder = "popularity.desc";
+                sortOrder = "popular";
                 //                Log.v("SORT_ORDER", sortOrder);
 
             } else {
-                sortOrder = "vote_average.desc";
+                sortOrder = "top_rated";
             }
             try {
-                final String BASE_URL = "http://api.themoviedb.org/3/discover/movie";
+                final String BASE_URL = "http://api.themoviedb.org/3/movie";
                 final String API_KEY = "api_key";
                 final String SORT_ORDER = "sort_by";
-//append_to_response does not work in discover method
-//                final String APPEND_TO_RESPONSE = "append_to_response";
-//                final String APPEND_TO_RESPONSE_VALUE = "reviews,trailers";
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                        .appendQueryParameter(SORT_ORDER, sortOrder)
-//                        .appendQueryParameter(APPEND_TO_RESPONSE, APPEND_TO_RESPONSE_VALUE)
+                        .appendPath(sortOrder)
                         .appendQueryParameter(API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
                 Log.v(LOG_TAG, "The URL for FetchMovie " + builtUri.toString());

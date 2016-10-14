@@ -23,16 +23,9 @@ public class MovieContentProvider extends ContentProvider {
     static final int TRAILER = 400;
 
     static UriMatcher buildUriMatcher() {
-        // I know what you're thinking.  Why create a UriMatcher when you can use regular
-        // expressions instead?  Because you're not crazy, that's why.
-
-        // All paths added to the UriMatcher have a corresponding code to return when a match is
-        // found.  The code passed into the constructor represents the code to return for the root
-        // URI.  It's common to use NO_MATCH as the code for this case.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;
 
-        // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, MovieContract.PATH_MOVIE, MOVIE);
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/*", MOVIE_DETAIL);
         matcher.addURI(authority, MovieContract.PATH_MOVIE + "/*", MOVIE_DETAIL);
@@ -40,10 +33,9 @@ public class MovieContentProvider extends ContentProvider {
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW);
         matcher.addURI(authority, MovieContract.PATH_REVIEWS, REVIEW_DETAIL);
         matcher.addURI(authority, MovieContract.PATH_TRAILERS, TRAILER);
-//        matcher.addURI(authority, com.example.wilbotiv.popularmoviess1.db.MovieContract.PATH_REVIEWS + "/#", REVIEW_DETAIL);
+
         return matcher;
     }
-
 
     @Override
     public boolean onCreate() {
@@ -57,7 +49,6 @@ public class MovieContentProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
 
-            // "movie"
             case MOVIE: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.MovieEntry.TABLE_NAME,
@@ -72,11 +63,7 @@ public class MovieContentProvider extends ContentProvider {
             }
 
             case MOVIE_DETAIL:{
-// taking a break to bake bread need to do WHERE clause and I think this is how i do it....
-//                selection = selection + "_ID = " uri.getLastPathSegment();
                 selection = "_id = " + uri.getLastPathSegment();
-//                selection = "_id = 1";
-
 
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.MovieEntry.TABLE_NAME,
@@ -89,7 +76,7 @@ public class MovieContentProvider extends ContentProvider {
                 );
                 break;
             }
-            // "favorite"
+
             case FAVORITE: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.FavoriteEntry.TABLE_NAME,
@@ -115,6 +102,7 @@ public class MovieContentProvider extends ContentProvider {
                 );
                 break;
             }
+
             case TRAILER: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MovieContract.TrailerEntry.TABLE_NAME,
@@ -162,7 +150,7 @@ public class MovieContentProvider extends ContentProvider {
 
         switch (match) {
             case MOVIE: {
-//                normalizeDate(values);
+
                 long _id = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = MovieContract.MovieEntry.buildMovieUri(_id);
@@ -183,7 +171,6 @@ public class MovieContentProvider extends ContentProvider {
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
-
     }
 
     @Override
@@ -220,7 +207,7 @@ public class MovieContentProvider extends ContentProvider {
 
         switch (match) {
             case MOVIE:
-//                normalizeDate(values);
+
                 rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
@@ -249,7 +236,6 @@ public class MovieContentProvider extends ContentProvider {
                 returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-//                        normalizeDate(value);
                         long _id = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
@@ -267,7 +253,7 @@ public class MovieContentProvider extends ContentProvider {
                 returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-//                        normalizeDate(value);
+
                         long _id = db.insert(MovieContract.ReviewEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;

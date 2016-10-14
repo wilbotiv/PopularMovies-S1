@@ -1,5 +1,6 @@
 package com.example.wilbotiv.popularmoviess1.fragments;
 
+import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -35,8 +36,9 @@ import com.example.wilbotiv.popularmoviess1.db.MovieContract;
 import com.example.wilbotiv.popularmoviess1.R;
 import com.squareup.picasso.Picasso;
 
-// TODO: 10/11/2016 You are performing database operations (which are POTENTIALLY lengthy operations) on the main UI thread (You can learn more about threads from the Udacity courses: Main Thread vs Background Thread). This could cause a stutter or an ANR (which is short for Application Not Responding, and usually occurs when the main thread of the application is blocked for too long). You can either put this type of operations inside of an AsyncTask or use an AsyncQueryHandler (for easier asynchronous access to Content Providers. Here is a simple tutorial that you can get started with.). Also it's better if you could show a progress indicator to the user. You can learn more about how to make your app responsive here from the Official Android Developer Website.
+// DONE: 10/11/2016 You are performing database operations (which are POTENTIALLY lengthy operations) on the main UI thread (You can learn more about threads from the Udacity courses: Main Thread vs Background Thread). This could cause a stutter or an ANR (which is short for Application Not Responding, and usually occurs when the main thread of the application is blocked for too long). You can either put this type of operations inside of an AsyncTask or use an AsyncQueryHandler (for easier asynchronous access to Content Providers. Here is a simple tutorial that you can get started with.). Also it's better if you could show a progress indicator to the user. You can learn more about how to make your app responsive here from the Official Android Developer Website.
 // TODO: 10/11/2016 Please remove the commented out code.
+// TODO: 10/13/2016 give user ability to unfavorite 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String DETAIL_URI = "URI";
@@ -138,10 +140,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 movieValues.put(MovieContract.FavoriteEntry.COLUMN_VOTEAVERAGE, voteAverage);
 
                 ContentResolver resolver = getContext().getContentResolver();
-                resolver.insert(MovieContract.FavoriteEntry.CONTENT_URI, movieValues);
 
-                Toast toast = Toast.makeText(getContext(), "'" + originalTitle + "' has been added to your Favorites", Toast.LENGTH_SHORT);
-                toast.show();
+                AsyncQueryHandler queryHandler = new AsyncQueryHandler(resolver) {
+                    @Override
+                    protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+                        super.onQueryComplete(token, cookie, cursor);
+
+                        Toast toast = Toast.makeText(getContext(), "'" + originalTitle + "' has been added to your Favorites", Toast.LENGTH_SHORT);
+                        toast.show();
+
+                    }
+
+                };
+                queryHandler.startInsert(0, null, MovieContract.FavoriteEntry.CONTENT_URI, movieValues);
             }
         });
         return rootView;
@@ -331,13 +342,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                             LinearLayout.LayoutParams.MATCH_PARENT));
                     trailerButton.setOnClickListener(new View.OnClickListener() {
 
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
-                            Log.v(LOG_TAG, "In on click");
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mSource)));
-                        }
-                    });
+                                                         @Override
+                                                         public void onClick(View v) {
+                                                             Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
+                                                             Log.v(LOG_TAG, "In on click");
+
+                                                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mSource));
+
+                                                             if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+                                                                 startActivity(intent);
+                                                             }
+                                                         }
+                                                     }
+                    );
                     linearLayoutTrailer.addView(trailerButton);
                 }
                 break;
@@ -348,16 +365,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void updateMovieReview() {
-//        Intent intent = getActivity().getIntent();
-//        String intentExtra = intent.getStringExtra(INTENT_KEY);
         FetchReviewTask fetchReviewTask = new FetchReviewTask(getContext());
         Log.v(LOG_TAG, "In updateMovieReview");
         fetchReviewTask.execute(mMovieID);
     }
 
     private void updateMovieTrailer() {
-//        Intent intent = getActivity().getIntent();
-//        String intentExtra = intent.getStringExtra(INTENT_KEY);
         FetchTrailerTask fetchTrailerTask = new FetchTrailerTask(getContext());
         Log.v(LOG_TAG, "In updateMovieTrailer");
         fetchTrailerTask.execute(mMovieID);

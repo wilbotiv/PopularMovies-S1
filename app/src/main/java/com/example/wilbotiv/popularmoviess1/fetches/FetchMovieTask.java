@@ -29,7 +29,8 @@ import java.util.Vector;
 // Done - Stopping here for the night. Tomorrow continue comparing PM to Sunshine fetch tasks.
 // Done - Stopping here because Isabelle is about to finish Piano Lesson. Next modify table to include sort column.
 // Done: 10/11/2016 FIX In a background thread, app queries the /movie/popular or /movie/top_rated API for the sort criteria specified in the settings menu.
-
+// TODO: 10/13/2016 also try using Volley, OkHttp or Gson libraries for Android networking.
+// DONE: 10/13/2016 use the required endpoints
 
 
 public class FetchMovieTask extends AsyncTask<Void, Void, Void> {

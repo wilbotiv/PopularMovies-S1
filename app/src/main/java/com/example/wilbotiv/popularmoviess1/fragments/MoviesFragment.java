@@ -25,12 +25,13 @@ import com.example.wilbotiv.popularmoviess1.db.MovieContract;
 import com.example.wilbotiv.popularmoviess1.adapters.MoviesAdapter;
 import com.example.wilbotiv.popularmoviess1.R;
 
+// TODO: 10/13/2016 no need to make a network call again when coming back from settings or detail if movie list exists.
+
 public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     private final String LOG_TAG = MoviesFragment.class.getSimpleName();
     private MoviesAdapter mMoviesAdapter;
-    private final String INTENT_KEY = "com.example.wilbotiv.popularmoviess1.movieID";
 
     private static final String movieColumns[] = {
             MovieContract.MovieEntry._ID,
@@ -97,8 +98,6 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-//                String movies = mMoviesAdapter.getItem(position).posterPath;
-//                Toast.makeText(getActivity(), movies, Toast.LENGTH_SHORT).show();
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 int id = cursor.getInt(COL_ID);
                 String movieID = cursor.getString(COL_MOVIE_ID);
@@ -106,19 +105,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 //                  DONE: setData will need to be changed here to support Favorites detail view....
                     // DONE: 9/22/2016 change the uri
                     ((Callback) getActivity()).onItemSelected(MovieContract.MovieEntry.buildMovieUri(Integer.parseInt(movieID)));
-
-//                    Intent intent = new Intent(getActivity(), DetailActivity.class)
-//                            .setData(MovieContract.MovieEntry.buildMovieUri(id));
-//                    intent.putExtra(INTENT_KEY, movieID);
-//                    startActivity(intent);
-
                 }
-
-                /*Intent intent = new Intent(getActivity(), DetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(PAR_KEY, movies.get(position));
-                intent.putExtras(bundle);*/
-//                startActivity(intent);
             }
         });
         return rootView;
@@ -127,19 +114,30 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     private void updateMovie() {
         getActivity().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
         FetchMovieTask movieTask = new FetchMovieTask(getActivity());
-//        FetchReviewTask reviewTask = new FetchReviewTask(getContext());
-//        String location = Utility.getPreferredLocation(getActivity());
         Log.v(LOG_TAG, "updateMovie() called");
         movieTask.execute();
-//      DONE: Start here this AsyncTask is working
-//        reviewTask.execute("140607");
     }
 
+
+    /*So you have to make some changes to your current implementation so that the movies list fetching
+    task is kicked off only if the sort order has changed or the movies list is empty (the Internet connection
+    might be poor so the data might fail to be fetched or when the app is initially launched):
+
+Dear Reviewer : ) It was suggested that I check two conditions before calling updateMovie().
+1. Check first to see if movie list is empty.
+2. Check to see if sort order is changed.
+
+It appears that I don't need to check the sort order bacause my loader does this work against the database. So I don't think that I need to check that.
+However, I could be wrong : )
+
+*/
     @Override
     public void onStart() {
         super.onStart();
-//        DONE: Check Sunshine, when does it fetch...
-        updateMovie();
+        if (mMoviesAdapter.isEmpty()) {
+            Log.v(LOG_TAG, "In onStart and adapter is empty");
+            updateMovie();
+        }
     }
 
     @Override
@@ -162,38 +160,29 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         int sortOrderValueToInt = Integer.parseInt(sortOrder);
         Uri movie = null;
         String sort = null;
-//        DONE: change sortOrder field to 1 or 0 instead of string vote_average.desc
+//DONE: change sortOrder field to 1 or 0 instead of string vote_average.desc
         String selection = null;
         if (sortOrderValueToInt == 0) {
             movie = MovieContract.MovieEntry.CONTENT_URI;
-//            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "ASC";
             selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'popular'";
         } else if (sortOrderValueToInt == 1) {
             movie = MovieContract.MovieEntry.CONTENT_URI;
-//            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + "DESC";
             selection = MovieContract.MovieEntry.COLUMN_SORT_ORDER + " = 'top_rated'";
         } else if (sortOrderValueToInt == 2) {
             movie = MovieContract.FavoriteEntry.CONTENT_URI;
-//            sort = com.example.wilbotiv.popularmoviess1.db.MovieContract.FavoriteEntry.COLUMN_ORIGINALTITLE + " " + "ASC";
         }
 //        Need to read pref file then if else if a URI.. Girls back from ballet need to get dinner ready....
 
 //What if changed sortOrder to int then switch to one of three different loaders, branch first...
         switch (id) {
             case MOVIE_LOADER:
-//                Uri movie = com.example.wilbotiv.popularmoviess1.db.MovieContract.FavoriteEntry.CONTENT_URI;
-//                        movie = com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.CONTENT_URI;
                 return new CursorLoader(getActivity(),
                         movie,
                         movieColumns,
                         selection,
                         null,
                         null);
-//                        com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.COLUMN_SORT_ORDER + " " + sortOrder);
-
 //FIXED: Don't know why the above sort order now breaks app on new install. Mysteriously just started working....
-//                return new CursorLoader(getActivity(), movie, null, null, null, null);
-
         }
 
         return null;

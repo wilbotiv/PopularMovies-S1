@@ -38,14 +38,10 @@ public class FetchTrailerTask extends AsyncTask<String, Void, Void> {
 
     private void getTrailerDataFromJson(String moviesJsonStr) throws JSONException {
 
-//        final String RESULTS = "results";
         final String MOVIE_ID = "id";
         final String YOUTUBE = "youtube";
         final String NAME = "name";
         final String SOURCE = "source";
-//        final String AUTHOR = "author";
-//        final String CONTENT = "content";
-//        final String COMMENT_ID = "id";
 
         try {
             JSONObject jsonObject = new JSONObject(moviesJsonStr);

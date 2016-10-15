@@ -79,7 +79,7 @@ public class FetchReviewTask extends AsyncTask<String, Void, Void> {
             // "I think not instead do this I used ContentResolver.delete() to delete the records in table.
             // I had a ContentProvider implemented so it made sense to use this."
 
-//            mContext.getContentResolver().delete(com.example.wilbotiv.popularmoviess1.db.MovieContract.MovieEntry.CONTENT_URI, null, null);
+
 
             // add to database
             if (cVVector.size() > 0) {

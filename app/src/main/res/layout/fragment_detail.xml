@@ -20,7 +20,8 @@
             android:gravity="center_vertical"
             android:padding="@dimen/activity_vertical_margin"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/icons"/>
+            android:textColor="@color/icons"
+            tools:text="Titanic"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,21 +55,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="57dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/primary_text"/>
+                    android:textColor="@color/primary_text"
+                    tools:text="Summer 1999"/>
 
                 <TextView
                     android:id="@+id/fragment_detail_textView_voteAverage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/secondary_text"/>
+                    android:textColor="@color/secondary_text"
+                    tools:text="4.5"/>
 
                 <TextView
                     android:id="@+id/fragment_detail_textView_movieID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/secondary_text"/>
+                    android:textColor="@color/secondary_text"
+                    tools:text="140706"/>
 
                 <Button
                     android:id="@+id/fragment_detail_button"
@@ -90,7 +94,7 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
-            />
+            tools:text="A very long review. A very long review. A very long review. "/>
 
         <LinearLayout
             android:id="@+id/fragment_detail_linearLayout_trailer"

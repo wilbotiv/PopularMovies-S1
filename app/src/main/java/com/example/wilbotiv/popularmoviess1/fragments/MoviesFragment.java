@@ -127,8 +127,8 @@ Dear Reviewer : ) It was suggested that I check two conditions before calling up
 1. Check first to see if movie list is empty.
 2. Check to see if sort order is changed.
 
-It appears that I don't need to check the sort order bacause my loader does this work against the database. So I don't think that I need to check that.
-However, I could be wrong : )
+It appears that I don't need to check the sort order because my loader does this work against the database. So I don't think that I need to check that.
+However, I could be wrong :)
 
 */
     @Override

@@ -32,6 +32,8 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     private final String LOG_TAG = MoviesFragment.class.getSimpleName();
     private MoviesAdapter mMoviesAdapter;
+    private boolean mSavedInstanceState;
+    private GridView mGridView;
 
     private static final String movieColumns[] = {
             MovieContract.MovieEntry._ID,
@@ -66,7 +68,9 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        if (savedInstanceState == null) {
+            mSavedInstanceState = false;
+        }
     }
 
     @Override
@@ -92,9 +96,10 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        GridView gridView = (GridView) rootView.findViewById(R.id.gridview_movies);
-        gridView.setAdapter(mMoviesAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView = (GridView) rootView.findViewById(R.id.gridview_movies);
+
+        mGridView.setAdapter(mMoviesAdapter);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
@@ -191,6 +196,14 @@ However, I could be wrong :)
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mMoviesAdapter.swapCursor(data);
+
+        if (mSavedInstanceState == false) {
+            Log.v(LOG_TAG, "In onCreate() savedInstanceState is null");
+            Cursor cursor = (Cursor) mMoviesAdapter.getItem(1);
+            String movieID = cursor.getString(COL_MOVIE_ID);
+        }
+
+        mGridView.setSelection(1);
     }
 
     @Override

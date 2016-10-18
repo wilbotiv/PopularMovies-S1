@@ -37,15 +37,14 @@ import com.example.wilbotiv.popularmoviess1.R;
 import com.squareup.picasso.Picasso;
 
 // DONE: 10/11/2016 You are performing database operations (which are POTENTIALLY lengthy operations) on the main UI thread (You can learn more about threads from the Udacity courses: Main Thread vs Background Thread). This could cause a stutter or an ANR (which is short for Application Not Responding, and usually occurs when the main thread of the application is blocked for too long). You can either put this type of operations inside of an AsyncTask or use an AsyncQueryHandler (for easier asynchronous access to Content Providers. Here is a simple tutorial that you can get started with.). Also it's better if you could show a progress indicator to the user. You can learn more about how to make your app responsive here from the Official Android Developer Website.
-// TODO: 10/11/2016 Please remove the commented out code.
-// TODO: 10/13/2016 give user ability to unfavorite 
+// DONE: 10/11/2016 Please remove the commented out code.
+// TODO: 10/13/2016 give user ability to un-favorite
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String DETAIL_URI = "URI";
     private Uri mUri;
     private String mMovieID;
     private String mSource;
-
 
     private static final int DETAIL_LOADER_HEADER = 0;
     private static final int DETAIL_LOADER_REVIEWS = 1;
@@ -246,6 +245,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         int loaderID = loader.getId();
         Log.v(LOG_TAG, "In onLoadFinished ");
         Context context = getContext();
+
         if (!data.moveToFirst()) {
             return;
         }

@@ -200,7 +200,7 @@ However, I could be wrong :)
         if (mSavedInstanceState == false) {
             Log.v(LOG_TAG, "In onCreate() savedInstanceState is null");
             Cursor cursor = (Cursor) mMoviesAdapter.getItem(1);
-            String movieID = cursor.getString(COL_MOVIE_ID);
+//            String movieID = cursor.getString(COL_MOVIE_ID);
         }
 
         mGridView.setSelection(1);

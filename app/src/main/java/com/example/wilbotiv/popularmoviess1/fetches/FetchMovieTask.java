@@ -95,6 +95,8 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
 // I had a ContentProvider implemented so it made sense to use this."
 
             // add to database
+//            found the problem this runs twice the second time it runs it destoys table.....
+//            mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
             if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
@@ -121,13 +123,23 @@ public class FetchMovieTask extends AsyncTask<Void, Void, Void> {
         String moviesJsonStr = null;
         String sortOrder;
 
+//        mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
+
         for (int i = 0; i < 2; i++) {
             if (i == 0) {
                 sortOrder = "popular";
+                String[] mSelectionArgs = {sortOrder};
+                mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI,
+                        null,
+                        null);
                 //                Log.v("SORT_ORDER", sortOrder);
 
             } else {
                 sortOrder = "top_rated";
+//                String[] mSelectionArgs = {sortOrder};
+//                mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI,
+//                        MovieContract.MovieEntry.COLUMN_SORT_ORDER,
+//                        mSelectionArgs);
             }
             try {
                 final String BASE_URL = "http://api.themoviedb.org/3/movie";

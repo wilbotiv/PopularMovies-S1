@@ -70,6 +70,8 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         setHasOptionsMenu(true);
         if (savedInstanceState == null) {
             mSavedInstanceState = false;
+        }else{
+            mSavedInstanceState = true;
         }
     }
 
@@ -117,7 +119,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void updateMovie() {
-        getActivity().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
+//        getActivity().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
         FetchMovieTask movieTask = new FetchMovieTask(getActivity());
         Log.v(LOG_TAG, "updateMovie() called");
         movieTask.execute();
@@ -139,10 +141,14 @@ However, I could be wrong :)
     @Override
     public void onStart() {
         super.onStart();
-        if (mMoviesAdapter.isEmpty()) {
-            Log.v(LOG_TAG, "In onStart and adapter is empty");
+//        if (mMoviesAdapter.isEmpty()) {
+//            Log.v(LOG_TAG, "In onStart and adapter is empty");
+//            updateMovie();
+//        }
+        if(mSavedInstanceState == false){
             updateMovie();
         }
+
     }
 
     @Override
@@ -199,11 +205,11 @@ However, I could be wrong :)
 
         if (mSavedInstanceState == false) {
             Log.v(LOG_TAG, "In onCreate() savedInstanceState is null");
-            Cursor cursor = (Cursor) mMoviesAdapter.getItem(1);
+//            Cursor cursor = (Cursor) mMoviesAdapter.getItem(1);
 //            String movieID = cursor.getString(COL_MOVIE_ID);
         }
 
-        mGridView.setSelection(1);
+//        mGridView.setSelection(1);
     }
 
     @Override
